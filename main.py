@@ -1,6 +1,8 @@
 import os
 import psycopg2
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, request, redirect
+from markupsafe import escape
+
 
 app = Flask(__name__)
 
@@ -21,3 +23,15 @@ def hello_world():
     conn.close()
     print(user)
     return f"index {user}"
+
+@app.route("/<name>")
+def hello(name):
+    return f"Hello, {escape(name)}!"
+
+@app.route("/test")
+def index():
+    return redirect(url_for("login"))
+
+@app.route("/login")
+def login():
+    return f"login page"
