@@ -1,38 +1,18 @@
 import os
-import psycopg2
-from flask import Flask, render_template, url_for, request, redirect
-from markupsafe import escape
-
-
+from flask import Flask, jsonify, json
+from flask_cors import CORS
+from src.queries.orm import select_users, insert_item
 app = Flask(__name__)
+app.config.from_object(__name__)
 
-def get_db_connection():
-    conn = psycopg2.connect(host='localhost',
-                            database='postgres',
-                            user=os.environ['DB_USERNAME'],
-                            password=os.environ['DB_PASSWORD'])
-    return conn
+CORS(app, resources={r'/*' : {'origins':'*'}})
 
-@app.route("/")
-def hello_world():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM users;')
-    user = cur.fetchall()
-    cur.close()
-    conn.close()
-    print(user)
-    return f"index {user}"
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    rows = select_users()
+    insert_item("Honda")
+    return jsonify('TEST')
 
-@app.route("/test")
-def index():
-    return redirect(url_for("login"))
+if __name__ == '__main__':
+    app.run
 
-@app.route("/login")
-def login():
-    return f"login page"
-
-@app.route("/hello/")
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('hello.html', person = name)
