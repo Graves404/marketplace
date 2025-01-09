@@ -10,7 +10,7 @@ engine = create_engine(
         max_overflow=10
         )
 
-session = sessionmaker(engine)
+session_factory = sessionmaker(engine)
 
 class Base(DeclarativeBase):
     pass
