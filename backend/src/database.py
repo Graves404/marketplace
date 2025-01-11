@@ -1,7 +1,8 @@
-from src.config import settings
+from config import settings
 from sqlalchemy import create_engine, text, select
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
-from src.models import User
+from typing import Annotated
+
 
 engine = create_engine(
         url=settings.DATABASE_URL_psycopg,
@@ -11,6 +12,8 @@ engine = create_engine(
         )
 
 session_factory = sessionmaker(engine)
+
+str_256 = Annotated[str, 256]
 
 class Base(DeclarativeBase):
     pass
