@@ -38,8 +38,8 @@ def insert_item(name: str):
 
 
 @staticmethod
-def insert_user(_name: str, _surname: str):
-    new_user = User(name=_name, surname=_surname)
+def insert_user(_name: str, _surname: str, _email: str, _city: str, _phone: str):
+    new_user = User(name=_name, surname=_surname, email=_email, city=_city, phone=_phone)
     with session_factory() as session:
         session.add(new_user)
         session.commit()
