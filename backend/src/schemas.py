@@ -6,8 +6,12 @@ class UserPostDTO(BaseModel):
     email: EmailStr
     city: str
     phone: str
+    username: str
 class UserDTO(UserPostDTO):
     id: int
+
+class UserPassDTO(UserDTO):
+    hash_pass: str
 
 class ItemsPostDTO(BaseModel):
     title: str
@@ -24,3 +28,13 @@ class ItemRelDTO(ItemDTO):
 
 class UserRelDTO(UserDTO):
     items: list["ItemDTO"]
+
+
+class PasswordPostDTO(BaseModel):
+    hash_pass: str
+
+class PasswordDTO(PasswordPostDTO):
+    id: int
+
+class PasswordRelDTO(PasswordDTO):
+    user: "UserDTO"
