@@ -1,14 +1,16 @@
 from fastapi import FastAPI, HTTPException, Response, Depends, Request
-from queries.orm import select_users, get_user_id, insert_user, get_user_by_username, check_hash, insert_item
-from schemas import UserDTO
+from .queries.orm import select_users, get_user_id, insert_user, get_user_by_username, check_hash, insert_item
+from .schemas import UserDTO
 from fastapi.middleware.cors import CORSMiddleware
 from authx import AuthX, AuthXConfig
+from .config import settings
+from .routers import crypto_currencies, user_router
 import jwt
 
 app = FastAPI()
 
 config = AuthXConfig()
-config.JWT_SECRET_KEY = "c4380a77d14d770c8785d270d50d2eb2a1486f85201646daab235d2ba8600b65"
+config.JWT_SECRET_KEY = settings.JWT_SECRET_KEY
 config.JWT_ACCESS_COOKIE_NAME = "mne_market_accesses_token"
 config.JWT_TOKEN_LOCATION = ["cookies"]
 
@@ -66,3 +68,6 @@ async def insert_item_to_db(req: Request, title_: str, description_: str, price_
     if user_id is not None:
         return insert_item(title_, description_, price_, city_, user_id)
     raise HTTPException(status_code=403, detail="Incorrect password or email")
+
+app.include_router(crypto_currencies.crypto_router)
+app.include_router(user_router.user_router)
