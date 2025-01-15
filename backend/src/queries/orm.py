@@ -1,9 +1,9 @@
-from models import User, Items, Password
+from src.models import User, Items, Password
 from sqlalchemy import select
-from database import engine, session_factory
-from schemas import UserDTO, UserRelDTO, PasswordDTO, UserPassDTO
+from src.database import session_factory, async_session_factory
+from src.schemas import UserDTO, UserRelDTO, PasswordDTO, UserPassDTO
 from sqlalchemy.orm import relationship, selectinload
-from hash_pass import hash_password, check_hash_pass, verify_hash_pass
+from src.hash_pass import hash_password, check_hash_pass, verify_hash_pass
 
 
 @staticmethod
@@ -13,8 +13,16 @@ def select_users():
             select(User)
             .limit(50)
         )
-        id = session.execute(query).scalar().all()
         res = session.execute(query)
+        result_orm = res.scalars().all()
+        result_dto = [UserDTO.model_validate(row, from_attributes=True) for row in result_orm]
+        return result_dto
+
+@staticmethod
+async def async_select_user():
+   async with async_session_factory() as session:
+        query = (select(User).limit(10))
+        res = await session.execute(query)
         result_orm = res.scalars().all()
         result_dto = [UserDTO.model_validate(row, from_attributes=True) for row in result_orm]
         return result_dto
@@ -93,3 +101,4 @@ def check_hash(email_: str, password_: str):
         )
         hash_storage = session.execute(query).scalar_one()
         return verify_hash_pass(password_, hash_storage)
+
