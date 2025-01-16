@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from src.http_client import CMCClient
-from src.config import settings
+from ..http.http_client import CMCClient
+from ..settings.config import settings
 
 cmc_client = CMCClient(
     "https://pro-api.coinmarketcap.com",

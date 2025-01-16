@@ -1,4 +1,4 @@
-from .config import settings
+from .settings.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from typing import Annotated
