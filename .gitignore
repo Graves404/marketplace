@@ -1,4 +1,3 @@
 /.venv
 backend/src/firebase_key.json
 *.pyc
-*.pyc

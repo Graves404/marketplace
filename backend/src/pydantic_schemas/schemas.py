@@ -38,3 +38,16 @@ class PasswordDTO(PasswordPostDTO):
 
 class PasswordRelDTO(PasswordDTO):
     user: "UserDTO"
+
+
+class ImagePostDTO(BaseModel):
+    file_name: str
+    url_photo: str
+    items_id: int
+
+
+class ImageDTO(ImagePostDTO):
+    id: int
+
+class ImageReDTO(ImageDTO):
+    items: "ItemDTO"

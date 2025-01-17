@@ -13,9 +13,16 @@ firebase_db = firestore.client()
 
 bucket = storage.bucket()
 
-def upload_file(filename_: str, file_: UploadFile):
-    blob = bucket.blob(f"images/{filename_}")
-    blob.upload_from_file(file_.file, content_type=file_.content_type)
-    blob.make_public()
-    return blob.public_url
+def upload_file(files: list[UploadFile]):
+    upload_list_urls = []
+    for file in files:
+        try:
+            blob = bucket.blob(f"images/{file.filename}")
+            blob.upload_from_file(file.file, content_type=file.content_type)
+
+            blob.make_public()
+            upload_list_urls.append(blob.public_url)
+        except Exception as e:
+            print(f"Error uploading file {file.filename}: {e}")
+    return upload_list_urls
 

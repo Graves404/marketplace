@@ -33,27 +33,27 @@ async def get_user_id(email_: str):
         return res.scalar_one()
 
 @staticmethod
-def insert_item(title_: str, description_: str, price_: int, city_: str, user_id_: int, file_name_: str,
-                url_file_: str):
+async def insert_item(title_: str, description_: str, price_: int, city_: str, user_id_: int, url_files_: list[str]):
     item = Items(title=title_, description=description_, price=price_, city=city_, user_id=user_id_)
-    with session_factory() as session:
-        session.add(item)
-        session.commit()
-        image = Images(file_name=file_name_, url_photo=url_file_, items_id=item.id)
-        session.add(image)
-        session.commit()
-
-    return {"msg", f"item {title_} added and photo {url_file_}"}
-
+    async with async_session_factory() as session:
+        try:
+            session.add(item)
+            await session.flush()
+            images = [
+                Images(url_photo=url, items_id=item.id)
+                for url in url_files_
+            ]
+            session.add_all(images)
+            await session.commit()
+            return {"msg", f"item {title_} added and photo {len(url_files_)}"}
+        except Exception as e:
+            await session.rollback()
+            raise e
 
 @staticmethod
-# Need insert password (hash)
-async def async_insert_user(_username: str, _password: str, _name: str, _surname: str, _email: str, _city: str,
-                            _phone: str):
-
+async def async_insert_user(_username: str, _password: str, _name: str, _surname: str, _email: str, _city: str,_phone: str):
     _hash_pass = hash_password(_password)
-    new_user = User(name=_name, surname=_surname, email=_email, city=_city, phone=_phone, username=_username,
-                    hash_pass=_hash_pass)
+    new_user = User(name=_name, surname=_surname, email=_email, city=_city, phone=_phone, username=_username, hash_pass=_hash_pass)
 
     async with async_session_factory() as session:
         session.add(new_user)
