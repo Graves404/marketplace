@@ -1,4 +1,4 @@
-from ..data_models.models import User, Items
+from ..data_models.models import User, Items, Images
 from sqlalchemy import select
 from ..database import session_factory, async_session_factory
 from ..pydantic_schemas.schemas import UserDTO, UserRelDTO, PasswordDTO
@@ -33,13 +33,17 @@ async def get_user_id(email_: str):
         return res.scalar_one()
 
 @staticmethod
-def insert_item(title_: str, description_: str, price_: int, city_: str, user_id_: int):
-    item_car = Items(title=title_, description=description_, price=price_, city=city_, user_id=user_id_)
+def insert_item(title_: str, description_: str, price_: int, city_: str, user_id_: int, file_name_: str,
+                url_file_: str):
+    item = Items(title=title_, description=description_, price=price_, city=city_, user_id=user_id_)
     with session_factory() as session:
-        session.add(item_car)
+        session.add(item)
         session.commit()
-    return {"msg", f"item {title_} added"}
+        image = Images(file_name=file_name_, url_photo=url_file_, items_id=item.id)
+        session.add(image)
+        session.commit()
 
+    return {"msg", f"item {title_} added and photo {url_file_}"}
 
 
 @staticmethod

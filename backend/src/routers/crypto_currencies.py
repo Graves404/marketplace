@@ -12,7 +12,7 @@ crypto_router = APIRouter(
     prefix="/cryptocurrency"
 )
 
-@crypto_router.get("")
+@crypto_router.get("/all")
 async def get_crypto_currencies():
     return await cmc_client.get_listing()
 

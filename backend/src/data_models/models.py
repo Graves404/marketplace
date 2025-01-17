@@ -1,7 +1,7 @@
 import datetime
 from typing import Annotated
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, text
+from sqlalchemy import ForeignKey, text, String
 
 Base = declarative_base()
 
@@ -36,12 +36,15 @@ class Items(Base):
 
     user: Mapped["User"] = relationship(back_populates="items")
 
-class Password(Base):
-    __tablename__ = "passwords"
+    images: Mapped[list["Images"]] = relationship(back_populates="items")
+
+class Images(Base):
+    __tablename__ = "url_photo_items"
 
     id: Mapped[intpk]
-    password: Mapped[str]
-    user_id: Mapped[intpk] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
+    file_name: Mapped[str] = mapped_column(String(500))
+    url_photo: Mapped[str] = mapped_column(String(500))
+    items_id: Mapped[int] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
 
-
+    items: Mapped["Items"] = relationship(back_populates="images")
 
