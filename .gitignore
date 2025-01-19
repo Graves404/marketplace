@@ -2,3 +2,12 @@
 backend/src/firebase_key.json
 *.pyc
 /__pycache__
+backend/src/routers/__pycache__
+backend/src/queries/__pycache__
+backend/src/pydantic_schemas/__pycache__
+backend/src/data_models/__pycache__
+backend/src/google_cloud/__pycache__
+backend/src/security/__pycache__
+backend/src/service/__pycache__
+backend/src/settings/__pycache__
+backend/src/__pycache__

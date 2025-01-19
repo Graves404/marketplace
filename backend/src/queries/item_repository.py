@@ -3,9 +3,7 @@ from ..data_models.models import Items, Images
 class ItemRepository:
     @classmethod
     async def add_new_item(cls, title_: str, description_: str, price_: int, city_: str, user_id_: int, url_files_: list[str]):
-        print(f"url_list  {url_files_}")
-        print(f"{title_}, {description_}, {price_}, {city_}, {user_id_}")
-        item = Items(title_, description_, price_, city_, user_id_)
+        item = Items(title=title_, description=description_, price=price_, city=city_, user_id=user_id_)
         async with async_session_factory() as session:
             try:
                 session.add(item)
