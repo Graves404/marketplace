@@ -20,4 +20,4 @@ app.add_middleware(
 app.include_router(user_router.user_router)
 app.include_router(auth_router.auth_router)
 app.include_router(items_router.item_router)
-app.include_router(crypto_currencies.crypto_router)
+# app.include_router(crypto_currencies.crypto_router)

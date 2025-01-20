@@ -10,9 +10,6 @@ class UserPostDTO(BaseModel):
 class UserDTO(UserPostDTO):
     id: int
 
-class UserPassDTO(UserDTO):
-    hash_pass: str
-
 class ItemsPostDTO(BaseModel):
     title: str
     description: str
@@ -23,31 +20,24 @@ class ItemsPostDTO(BaseModel):
 class ItemDTO(ItemsPostDTO):
     id: int
 
-class ItemRelDTO(ItemDTO):
-    user: "UserDTO"
+
+class ImagePostDTO(BaseModel):
+    url_photo: str
+    item_id: int
+
+
+class ImageDTO(ImagePostDTO):
+    id: int
 
 class UserRelDTO(UserDTO):
     items: list["ItemDTO"]
 
 
-class PasswordPostDTO(BaseModel):
-    hash_pass: str
+class ItemIMageRelDTO(ItemDTO):
+    images: list["ImageDTO"]
 
-class PasswordDTO(PasswordPostDTO):
-    id: int
-
-class PasswordRelDTO(PasswordDTO):
+class ItemRelDTO(ItemDTO):
     user: "UserDTO"
-
-
-class ImagePostDTO(BaseModel):
-    file_name: str
-    url_photo: str
-    items_id: int
-
-
-class ImageDTO(ImagePostDTO):
-    id: int
 
 class ImageReDTO(ImageDTO):
     items: "ItemDTO"

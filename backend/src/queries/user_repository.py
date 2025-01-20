@@ -1,5 +1,5 @@
 from ..data_models.models import User
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from ..database import async_session_factory
 from sqlalchemy.orm import selectinload
 class UserRepository:
@@ -37,3 +37,20 @@ class UserRepository:
             query = (select(User.id).filter(User.email == email_))
             res = await session.execute(query)
             return res.scalar_one()
+
+    @classmethod
+    async def refresh_data_user(cls, _username: str, _password: str, _name: str, _surname: str, _email: str, _city: str, _phone: str):
+        return await ...
+
+    @classmethod
+    async def delete_user(cls, id_user: int):
+        async with async_session_factory() as session:
+            if id_user is not None:
+                query = (delete(User).filter(User.id == id_user))
+                await session.execute(query)
+                await session.commit()
+            return {"msg": f"User {id_user} deleted"}
+
+# TODO:
+#  1. Add a function "Update" with sqlalchemy 'update'
+#  Link: https://docs.sqlalchemy.org/en/20/core/dml.html

@@ -1,12 +1,13 @@
 from firebase_admin import firestore, credentials, storage
 from fastapi import UploadFile
+from ..security.security_config import settings
 import firebase_admin
 
 creds = credentials.Certificate("src/firebase_key.json")
 
 firebase_app = firebase_admin.initialize_app(creds, {
-    'databaseURL': "https://market-479da-default-rtdb.firebaseio.com/",
-    'storageBucket': 'market-479da.firebasestorage.app'
+    'databaseURL': settings.DATA_BASE_URL_FIREBASE,
+    'storageBucket': settings.STORAGE_BUCKET
 })
 
 firebase_db = firestore.client()
@@ -26,3 +27,13 @@ def upload_file(files: list[UploadFile]):
             print(f"Error uploading file {file.filename}: {e}")
     return upload_list_urls
 
+def delete_files(urls: list[str]):
+    for url in urls:
+        try:
+            correct_url = url.replace(settings.BASE_URL, "")
+            blob = bucket.blob(correct_url)
+            blob.delete()
+        except Exception as e:
+            print(f"Error {e}")
+
+    return {"msg": "images delete"}

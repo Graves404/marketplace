@@ -11,3 +11,5 @@ backend/src/security/__pycache__
 backend/src/service/__pycache__
 backend/src/settings/__pycache__
 backend/src/__pycache__
+backend/.env
+backend/src/data_models/__pycache__

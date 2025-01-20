@@ -19,10 +19,15 @@ class User(Base):
     username: Mapped[str]
     hash_pass: Mapped[str]
 
-    items: Mapped[list["Items"]] = relationship(back_populates="user")
+    items: Mapped[list["Items"]] = relationship(back_populates="user", cascade="all, delete", passive_deletes=True)
 
-
-
+class UpdateUser(User):
+    name = mapped_column(String, nullable=True, use_existing_column=True)
+    surname = mapped_column(String, nullable=True, use_existing_column=True)
+    email = mapped_column(String, nullable=True, use_existing_column=True)
+    city = mapped_column(String, nullable=True, use_existing_column=True)
+    phone = mapped_column(String, nullable=True, use_existing_column=True)
+    username = mapped_column(String, nullable=True, use_existing_column=True)
 class Items(Base):
     __tablename__ = "items"
 
@@ -36,15 +41,14 @@ class Items(Base):
 
     user: Mapped["User"] = relationship(back_populates="items")
 
-    images: Mapped[list["Images"]] = relationship(back_populates="items")
+    images: Mapped[list["Images"]] = relationship(back_populates="items", cascade="all, delete", passive_deletes=True)
 
 class Images(Base):
     __tablename__ = "url_photo_items"
 
     id: Mapped[intpk]
-    file_name: Mapped[str] = mapped_column(String(500))
     url_photo: Mapped[str] = mapped_column(String(500))
-    items_id: Mapped[int] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
+    item_id: Mapped[int] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
 
     items: Mapped["Items"] = relationship(back_populates="images")
 
