@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr
-
+from pydantic import BaseModel, EmailStr, field_validator
+# from pydantic_extra_types.phone_numbers import PhoneNumber
 class UserPostDTO(BaseModel):
     name: str
     surname: str
@@ -9,6 +9,22 @@ class UserPostDTO(BaseModel):
     username: str
 class UserDTO(UserPostDTO):
     id: int
+
+
+class UserUpdatePostDTO(UserPostDTO):
+    name: str | None
+    surname: str | None
+    email: EmailStr | None
+    city: str | None
+    phone: str | None
+    username: str | None
+
+    @field_validator("email", mode='before')
+    def validate_email(cls, value):
+        if value == "":
+            return None
+        return value
+
 
 class ItemsPostDTO(BaseModel):
     title: str

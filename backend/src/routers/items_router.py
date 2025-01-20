@@ -15,6 +15,10 @@ async def get_all():
 async def add_new_item_service(req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile]):
     return await Item.add_new_item(req, title_, description_, price_, city_, files)
 
+@item_router.get("/get_item/{id}")
+async def get_current_item(id_: int):
+    return await Item.get_current_item(id_)
+
 @item_router.post("/delete_item/{item}", dependencies=[Depends(security.access_token_required)])
-async def delete_item(req: Request, id_: int, urls_: list[str]):
+async def delete_item(id_: int, urls_: list[str]):
     return await Item.delete_item(id_, urls_)

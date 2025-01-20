@@ -24,7 +24,7 @@ def upload_file(files: list[UploadFile]):
             blob.make_public()
             upload_list_urls.append(blob.public_url)
         except Exception as e:
-            print(f"Error uploading file {file.filename}: {e}")
+            return f"Error uploading file {file.filename}: {e}"
     return upload_list_urls
 
 def delete_files(urls: list[str]):
@@ -34,6 +34,6 @@ def delete_files(urls: list[str]):
             blob = bucket.blob(correct_url)
             blob.delete()
         except Exception as e:
-            print(f"Error {e}")
+            return f"Error {e}"
 
     return {"msg": "images delete"}

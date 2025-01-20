@@ -1,7 +1,7 @@
 from ..database import async_session_factory
 from ..data_models.models import Items, Images
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy import select, delete
+from sqlalchemy.orm import selectinload
 class ItemRepository:
     @classmethod
     async def get_all(cls):
@@ -25,7 +25,23 @@ class ItemRepository:
             except Exception as e:
                 await session.rollback()
                 raise e
-# TODO:
-#  1. Add Function "Update" and "Delete" of item, if user wanna change any information about self item or delete current item.
-#  Use SQLAlchemy methods: 1. Update 2. Delete
-#  Link: https://docs.sqlalchemy.org/en/20/core/dml.html
+
+    @classmethod
+    async def delete_item(cls, id_item: int):
+        async with async_session_factory() as session:
+            if id_item is not None:
+                query = (delete(Items).filter(Items.id == id_item))
+                await session.execute(query)
+                await session.commit()
+            return {"msg": f"Item {id_item} deleted"}
+
+
+    #TODO UPDATE ITEM (METHOD)
+
+    @classmethod
+    async def get_item_by_id(cls, id_: int):
+        async with async_session_factory() as session:
+            query = (select(Items).filter(Items.id == id_).options(selectinload(Items.images)))
+            result_query = await session.execute(query)
+            result_orm = result_query.scalars().all()
+            return result_orm

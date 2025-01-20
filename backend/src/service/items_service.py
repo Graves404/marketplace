@@ -6,7 +6,7 @@ from ..pydantic_schemas.schemas import ItemIMageRelDTO
 
 class Item:
     @classmethod
-    async def get_all_items(cls):
+    async def get_all_items(cls) -> list[ItemIMageRelDTO]:
         result_orm = await ItemRepository.get_all()
         result_dto = [ItemIMageRelDTO.model_validate(row, from_attributes=True) for row in result_orm]
         return result_dto
@@ -16,17 +16,22 @@ class Item:
         user_id = JwtService.get_id_user_token(token)
         if user_id is not None:
             url_file = upload_file(files)
+            #TODO: Sometimes item can be without images. If user don't upload image - we can get Expectation
             return await ItemRepository.add_new_item(title_, description_, price_, city_, user_id, url_file)
         raise HTTPException(status_code=403, detail="Incorrect password or email")
 
     @classmethod
     async def delete_item(cls, id_: int, urls: list[str]):
-        print(f"id {id_}")
-        print(f"urls {urls}")
-        data = delete_files(urls)   # delete from cloud storage
-        return {"msg": f"{data}"}
+        delete_files(urls)  # delete from cloud storage
+        response = await ItemRepository.delete_item(id_)
+        return {"msg": f"{response}"}
+
+    #TODO: UPDATE ITEM METHOD
+
+    @classmethod
+    async def get_current_item(cls, id_: int):
+        item = await ItemRepository.get_item_by_id(id_)
+        result_dto = [ItemIMageRelDTO.model_validate(row, from_attributes=True) for row in item]
+        return result_dto
 
 
-# TODO: add more function:
-#  1. update_item (title, description, price, city)
-#  2. Delete item from DB.
