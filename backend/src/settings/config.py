@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     BASE_URL: str
     DATA_BASE_URL_FIREBASE: str
     STORAGE_BUCKET: str
+    URL_CLOUD_STORAGE: str
 
     @property
     def DATABASE_URL_asyncpg(self):

@@ -13,3 +13,6 @@ backend/src/settings/__pycache__
 backend/src/__pycache__
 backend/.env
 backend/src/data_models/__pycache__
+backend/src/data_models/__pycache__
+backend/src/settings/__pycache__
+backend/src/security/__pycache__/hash_pass.cpython-311.pyc
