@@ -16,3 +16,5 @@ class AuthRepository:
                 return HTTPException(status_code=401, detail="Incorrect password or email")
 
             return await verify_hash_pass(password_, hash_storage)
+
+#TODO Change all session
