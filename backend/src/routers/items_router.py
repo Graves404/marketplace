@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Request, UploadFile, BackgroundTasks
 from ..security.security_config import security
 from ..service.items_service import Item
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 item_router = APIRouter(

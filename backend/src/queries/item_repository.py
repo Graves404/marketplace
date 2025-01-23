@@ -1,6 +1,5 @@
 from fastapi import UploadFile
-
-from ..database import async_session_factory
+from ..engine_database.database import async_session_factory, get_async_session_factory
 from ..data_models.models import Items, Images
 from sqlalchemy import select, delete
 from sqlalchemy.orm import selectinload
@@ -48,3 +47,9 @@ class ItemRepository:
             result_query = await session.execute(query)
             result_orm = result_query.scalars().all()
             return result_orm
+
+
+
+# query = (select(Items).options(selectinload(Items.images)))
+#         start_query = await get_async_session_factory().execute(query)
+#         return start_query.scalars().all()

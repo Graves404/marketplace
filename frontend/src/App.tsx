@@ -52,7 +52,7 @@ export default function App() {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Market ©{new Date().getFullYear()} Created by Ant UED
+        Market ©{new Date().getFullYear()} Design created by Ant UED
       </Footer>
     </Layout>
     </>
