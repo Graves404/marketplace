@@ -10,8 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class User:
     @classmethod
     async def get_current_user_by_email(cls, email_: str, session: AsyncSession):
-        result_orm = await UserRepository.get_current_user(email_, session)
-        result_dto = [UserRelDTO.model_validate(row, from_attributes=True) for row in result_orm]
+        user = await UserRepository.get_current_user(email_, session)
+        result_dto = UserRelDTO.model_validate(user, from_attributes=True)
         return result_dto
 
     @classmethod

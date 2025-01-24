@@ -17,7 +17,7 @@ class UserRepository:
     async def get_current_user(cls, email_: str, session: AsyncSession):
         query = (select(User).filter(User.email == email_).options(selectinload(User.items)))
         result_query = await session.execute(query)
-        return result_query.scalars().all()
+        return result_query.scalars().first()
 
     @classmethod
     async def registration_user(cls, _username: str, _password: str, _name: str, _surname: str, _email: str, _city: str, _phone: str, session: AsyncSession):
