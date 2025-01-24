@@ -41,4 +41,4 @@ class ItemRepository:
     async def get_item_by_id(cls, id_: int, session: AsyncSession):
         query = (select(Items).filter(Items.id == id_).options(selectinload(Items.images)))
         result_query = await session.execute(query)
-        return result_query.scalars().all()
+        return result_query.scalars().first()

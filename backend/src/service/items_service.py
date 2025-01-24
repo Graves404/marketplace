@@ -42,7 +42,7 @@ class Item:
     @classmethod
     async def get_current_item(cls, id_: int, session: AsyncSession):
         item = await ItemRepository.get_item_by_id(id_, session)
-        result_dto = [ItemIMageRelDTO.model_validate(row, from_attributes=True) for row in item]
+        result_dto = ItemIMageRelDTO.model_validate(item, from_attributes=True)
         return result_dto
 
 
