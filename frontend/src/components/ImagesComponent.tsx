@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'antd';
-import { ImageData } from '../models/ImageData';
+import  ImageData  from '../models/ImageData';
 
 const ImagesComponent: React.FC<ImageData> = ({ image }) => {
   return(

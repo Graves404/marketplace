@@ -1,7 +1,7 @@
 import axios from "axios"
 import ListItem from "./ListItem"
 import React, { useEffect, useState } from "react"
-import { Item } from "../models/Item"
+import  Item  from "../models/Item"
 import { Layout, theme, Carousel } from 'antd';
 
 const { Header, Content, Footer } = Layout;
@@ -33,7 +33,6 @@ const HomePage: React.FC = () => {
     useEffect(()=> {
       fetchItems()
     }, []);
-
     return (
         <div>
         <Layout>

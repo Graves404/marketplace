@@ -1,5 +1,5 @@
 import { Card, List } from 'antd';
-import { Item } from '../models/Item';
+import  Item  from '../models/Item';
 import { Link } from 'react-router'
 import ImagesComponent from './ImagesComponent';
 

@@ -1,5 +1,5 @@
-import { ImageData } from "./ImageData"
-export interface Item {
+import  ImageData  from "./ImageData"
+export default interface Item {
     id: number,
     title: string,
     description: string,
