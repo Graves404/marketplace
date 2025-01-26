@@ -5,10 +5,11 @@ import  ImageData  from '../models/ImageData';
 const ImagesComponent: React.FC<ImageData> = ({ image }) => {
   return(
     <>
-      <Image
-        width={200}
-        src={image.url_photo}
-      />
+      <Image.PreviewGroup preview={{
+        onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+      }}>
+        <Image key={image.id} src={image.url_photo} width={200}/>
+      </Image.PreviewGroup>
     </>
   )
 };

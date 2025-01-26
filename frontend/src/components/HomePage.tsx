@@ -2,7 +2,10 @@ import axios from "axios"
 import ListItem from "./ListItem"
 import React, { useEffect, useState } from "react"
 import  Item  from "../models/Item"
+import { Link } from 'react-router'
 import { Layout, theme, Carousel } from 'antd';
+import HeaderComponent from "./Header/HeaderComponent"
+import FooterComponent from "./Footer/FooterComponent"
 
 const { Header, Content, Footer } = Layout;
 
@@ -36,19 +39,7 @@ const HomePage: React.FC = () => {
     return (
         <div>
         <Layout>
-          <Header>
-            <div className="flex justify-between items-center w-full">
-              <div className="flex-1 text-center">
-                <p className="text-white">Home</p>
-              </div>
-              <div className="flex-1 text-center">
-                <p className="text-white">Sign In / Sign Up</p>
-              </div>
-              <div className="flex-1 text-center">
-                <p className="text-white">Help</p>
-              </div>
-            </div>
-          </Header>
+          <HeaderComponent/>
           <Carousel autoplay>
             <div className="w-full h-64">
               <div style={contentStyle}>
@@ -83,9 +74,7 @@ const HomePage: React.FC = () => {
               <ListItem urls={items} />
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Market ©{new Date().getFullYear()} Design created by Ant UED
-          </Footer>
+          <FooterComponent/>
         </Layout>
       </div>
     )

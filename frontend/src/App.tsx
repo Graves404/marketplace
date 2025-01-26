@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router';
 import HomePage from './components/HomePage';
-import ItemComponent from './components/ItemComponent';
+import ItemComponent from './components/Content/ItemComponent';
 
 
 export default function App() {
