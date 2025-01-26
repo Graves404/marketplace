@@ -48,12 +48,17 @@ class ImageDTO(ImagePostDTO):
 class UserRelDTO(UserDTO):
     items: list["ItemDTO"]
 
-
-class ItemIMageRelDTO(ItemDTO):
-    images: list["ImageDTO"]
-
 class ItemRelDTO(ItemDTO):
     user: "UserDTO"
 
+
+class ItemIMageRelDTO(ItemRelDTO):
+    images: list["ImageDTO"]
+
+
 class ImageReDTO(ImageDTO):
     items: "ItemDTO"
+
+# TODO 1. Change some models for response endpoint, some models return more information than needs
+#  Example: In methods "get_all_items" we use model ItemIMageRelDTO and we don't need information about user, but in
+#  method "get_current_item_by_id" frontend renders some user detail: Name, Phone, Email

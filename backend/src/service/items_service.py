@@ -2,7 +2,7 @@ from fastapi import Request, UploadFile, HTTPException, BackgroundTasks
 from ..queries.item_repository import ItemRepository
 from ..google_cloud.cloud_settings import upload_file, delete_files
 from ..service.jwt_service import JwtService
-from ..pydantic_schemas.schemas import ItemIMageRelDTO
+from ..pydantic_schemas.schemas import ItemRelDTO, ItemIMageRelDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class Item:

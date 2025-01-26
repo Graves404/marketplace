@@ -51,4 +51,3 @@ class Images(Base):
     item_id: Mapped[int] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
 
     items: Mapped["Items"] = relationship(back_populates="images")
-

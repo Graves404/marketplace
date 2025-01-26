@@ -1,14 +1,13 @@
 from fastapi import UploadFile
-from ..engine_database.database import async_session_factory
-from ..data_models.models import Items, Images
+from ..data_models.models import Items, Images, User
 from sqlalchemy import select, delete
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..settings.config import settings
 class ItemRepository:
     @classmethod
     async def get_all(cls, session: AsyncSession):
-        query = (select(Items).options(selectinload(Items.images)))
+        query = (select(Items).options(selectinload(Items.images), selectinload(Items.user)))
         start_query = await session.execute(query)
         return start_query.scalars().all()
     @classmethod
@@ -39,6 +38,6 @@ class ItemRepository:
 
     @classmethod
     async def get_item_by_id(cls, id_: int, session: AsyncSession):
-        query = (select(Items).filter(Items.id == id_).options(selectinload(Items.images)))
+        query = (select(Items).filter(Items.id == id_).options(selectinload(Items.user), selectinload(Items.images)))
         result_query = await session.execute(query)
         return result_query.scalars().first()

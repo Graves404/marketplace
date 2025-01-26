@@ -1,5 +1,4 @@
 from ..data_models.models import User
-from ..engine_database.database import (async_session_factory)
 from ..security.hash_pass import verify_hash_pass
 from sqlalchemy import select
 from fastapi import HTTPException
