@@ -1,6 +1,5 @@
 from ..data_models.models import User
 from sqlalchemy import select, delete
-from ..engine_database.database import async_session_factory
 from sqlalchemy.orm import selectinload
 from ..pydantic_schemas.schemas import UserUpdatePostDTO
 from ..data_models.update_data_validation import Validation
