@@ -1,4 +1,4 @@
-export interface ImageData {
+export default interface ImageData {
     id: number,
     item_id: number,
     url_photo: string,

@@ -1,5 +1,6 @@
 import { Card, List } from 'antd';
-import { Item } from '../models/Item';
+import  Item  from '../models/Item';
+import { Link } from 'react-router'
 import ImagesComponent from './ImagesComponent';
 
 interface ListItemProps {
@@ -7,24 +8,28 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ urls }) => {
+    
     return(
         <div>
             <List
             grid={{ gutter: 16, column: 4 }}
             dataSource={urls}
             renderItem={(item) => (
-                <List.Item>
-                    <Card title={item.title}>
-                        <p>{item.description}</p>
-                        <p>{item.price}</p>
-                        <p>{item.city}</p>
-                        {item.images.length > 0 ? (
-                            <ImagesComponent image={item.images[0]}/>
-                        ) : (
-                            <img src="../error.png"/>
-                        )}
-                    </Card>
-                </List.Item>
+                    <List.Item>
+                        <Link to={`/item/${item.id}`}>
+                            <Card title={item.title}>
+                                <div className='flex'>
+                                    <div>{item.price} €</div>
+                                    <div>{item.city}</div>
+                                    {item.images.length > 0 ? (
+                                        <ImagesComponent image={item.images[0]}/>
+                                    ) : (
+                                        <img src="../img/error.png"/>
+                                    )}
+                                </div>
+                            </Card>
+                        </Link>
+                    </List.Item>
             )}
             />
         </div>
