@@ -16,6 +16,9 @@ const ItemComponent: React.FC = () => {
     
     const [item, setItem] = useState<Item>();
 
+    console.log(item);
+    
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken()
@@ -66,7 +69,7 @@ const ItemComponent: React.FC = () => {
                             <p>{item?.price} EUR</p>
                             <p>{item?.description}</p>
                             <p>{item?.city}</p>
-                            <UserInformationComponent/>
+                            {item?.user && <UserInformationComponent user={item.user} />}
                         </div>
                     </div>
                 </Content>
