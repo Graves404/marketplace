@@ -1,4 +1,5 @@
 import  ImageData  from "./ImageData"
+import User from './User';
 export default interface Item {
     id: number,
     title: string,
@@ -7,4 +8,5 @@ export default interface Item {
     city: string,
     images: ImageData[],
     user_id: number
+    user: User
 }

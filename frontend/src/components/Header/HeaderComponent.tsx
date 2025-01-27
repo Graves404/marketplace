@@ -16,7 +16,9 @@ const HeaderComponent: React.FC = () => {
                             </Link>
                             </div>
                             <div className="flex-1 text-center">
-                                <p className="text-white">Sign In / Sign Up</p>
+                                <Link to={`/login`}>
+                                    <p className="text-white">Sign In / Sign Up</p>
+                                </Link>
                             </div>
                             <div className="flex-1 text-center">
                                 <p className="text-white">Help</p>

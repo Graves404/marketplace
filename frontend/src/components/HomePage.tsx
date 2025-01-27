@@ -2,12 +2,11 @@ import axios from "axios"
 import ListItem from "./ListItem"
 import React, { useEffect, useState } from "react"
 import  Item  from "../models/Item"
-import { Link } from 'react-router'
 import { Layout, theme, Carousel } from 'antd';
 import HeaderComponent from "./Header/HeaderComponent"
 import FooterComponent from "./Footer/FooterComponent"
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
 const contentStyle: React.CSSProperties = {
   height: '560px',
