@@ -12,5 +12,5 @@ class Auth:
             uid_ = await User.get_id_current_user(email_=email_, session=session)
             token = security.create_access_token(uid=str(uid_))
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, token)
-            return {"access_token", token}
+            return token
         raise HTTPException(status_code=401, detail="Incorrect password or email")
