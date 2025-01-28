@@ -2,14 +2,14 @@ from fastapi import Request, UploadFile, HTTPException, BackgroundTasks
 from ..queries.item_repository import ItemRepository
 from ..google_cloud.cloud_settings import upload_file, delete_files
 from ..service.jwt_service import JwtService
-from ..pydantic_schemas.schemas import ItemRelDTO, ItemIMageRelDTO
+from ..pydantic_schemas.schemas import ItemRelDTO, ItemIMageRelDTO, ItemGeneralDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class Item:
     @classmethod
     async def get_all_items(cls, session: AsyncSession) -> list[ItemIMageRelDTO]:
         result_orm = await ItemRepository.get_all(session)
-        result_dto = [ItemIMageRelDTO.model_validate(row, from_attributes=True) for row in result_orm]
+        result_dto = [ItemGeneralDTO.model_validate(row, from_attributes=True) for row in result_orm]
         return result_dto
     @classmethod
     #TODO use background

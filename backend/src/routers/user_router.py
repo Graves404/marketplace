@@ -34,3 +34,11 @@ async def update_password_user(req: Request, email: str, old_password_: str, new
 @user_router.post("/delete_user", dependencies=[Depends(security.access_token_required)])
 async def delete_current_user(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.delete_user(req, session)
+
+@user_router.get("/test", dependencies=[Depends(security.access_token_required)])
+async def test_point(req: Request):
+    if req.cookies.get("mne_market_accesses_token"):
+        return {"msg": "TOP SECRET"}
+
+    return {"msg": "No"}
+

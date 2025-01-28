@@ -7,7 +7,7 @@ from ..settings.config import settings
 class ItemRepository:
     @classmethod
     async def get_all(cls, session: AsyncSession):
-        query = (select(Items).options(selectinload(Items.images), selectinload(Items.user)))
+        query = (select(Items).options(selectinload(Items.images)))
         start_query = await session.execute(query)
         return start_query.scalars().all()
     @classmethod
