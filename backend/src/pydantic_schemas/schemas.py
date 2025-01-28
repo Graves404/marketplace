@@ -36,6 +36,9 @@ class ItemsPostDTO(BaseModel):
 class ItemDTO(ItemsPostDTO):
     id: int
 
+class ItemGeneralDTO(ItemDTO):
+    images: list["ImageDTO"]
+
 
 class ImagePostDTO(BaseModel):
     url_photo: str
