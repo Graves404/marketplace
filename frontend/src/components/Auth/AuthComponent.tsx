@@ -20,7 +20,7 @@ type FieldType = {
         try {
             const response = await axios.post<FieldType>(`http://127.0.0.1:8000/authentication/check_user?email_=${user.email}&pass_=${user.password}`);
             if (response.data) {
-                Cookies.set("mne_market_accesses_token:", response.data, {expires : 7});
+                Cookies.set("mne_market_accesses_token", response.data, {expires : 1, sameSite: "None", secure: true});
                 navigate('/my_profile');
             }
         } catch (error) {
