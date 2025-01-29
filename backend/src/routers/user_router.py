@@ -1,4 +1,7 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, Request
+from fastapi.security import OAuth2PasswordBearer
 from ..security.security_config import security
 from ..pydantic_schemas.schemas import UserDTO
 from ..service.user_service import User
@@ -6,6 +9,7 @@ from ..pydantic_schemas.schemas import UserUpdatePostDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..engine_database.database import get_async_session_factory
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 user_router = APIRouter(
     prefix="/user"
@@ -35,10 +39,6 @@ async def update_password_user(req: Request, email: str, old_password_: str, new
 async def delete_current_user(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.delete_user(req, session)
 
-@user_router.get("/test", dependencies=[Depends(security.access_token_required)])
-async def test_point(req: Request):
-    if req.cookies.get("mne_market_accesses_token"):
-        return {"msg": "TOP SECRET"}
-
-    return {"msg": "No"}
-
+@user_router.get("/my_profile", dependencies=[Depends(security.access_token_required)])
+async def my_profile(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
+    return await User.get_user_info(req, session)

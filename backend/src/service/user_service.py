@@ -31,7 +31,7 @@ class User:
 
     @classmethod
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):
-        token = req.cookies.get("mne_market_accesses_token")
+        token = req.headers.get("mne_market_accesses_token")
         user_id = JwtService.get_id_user_token(token)
         res = await UserRepository.refresh_data_user(user_id, update_user, session)
         return {f"{user_id}": res}
@@ -40,14 +40,21 @@ class User:
     @classmethod
     async def update_password(cls, req: Request, email: str, old_password: str, new_password: str, session: AsyncSession):
         if AuthRepository.authentication(email, old_password, session):
-            token = req.cookies.get("mne_market_accesses_token")
+            token = req.headers.get("mne_market_accesses_token")
             user_id = JwtService.get_id_user_token(token)
             return await UserRepository.update_password(user_id, hash_password(new_password), session)
         raise HTTPException(status_code=403, detail="Incorrect password or email")
 
     @classmethod
     async def delete_user(cls, req: Request, session: AsyncSession):
-        token = req.cookies.get("mne_market_accesses_token")
+        token = req.headers.get("Authorization")
         user_id = JwtService.get_id_user_token(token)
         #TODO: DELETE IMAGES FROM A CLOUD STORAGE
         return await UserRepository.delete_user(user_id, session)
+
+    @classmethod
+    async def get_user_info(cls, req: Request, session: AsyncSession):
+        token = req.headers.get("Authorization")
+        user_id = JwtService.get_id_user_token(token)
+        user = await UserRepository.get_user_by_id(user_id, session)
+        return UserRelDTO.model_validate(user, from_attributes=True)
