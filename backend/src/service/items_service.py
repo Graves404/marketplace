@@ -15,7 +15,7 @@ class Item:
     #TODO use background
     async def add_new_item(cls, req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks,
                            session: AsyncSession):
-        token = req.cookies.get("mne_market_accesses_token")
+        token = req.headers.get("mne_market_accesses_token")
         user_id = JwtService.get_id_user_token(token)
         if user_id is not None:
             for file in files:

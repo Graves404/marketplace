@@ -1,4 +1,4 @@
-from ..data_models.models import User
+from ..data_models.models import User, Items, Images
 from sqlalchemy import select, delete
 from sqlalchemy.orm import selectinload
 from ..pydantic_schemas.schemas import UserUpdatePostDTO
@@ -15,6 +15,13 @@ class UserRepository:
     @classmethod
     async def get_current_user(cls, email_: str, session: AsyncSession):
         query = (select(User).filter(User.email == email_).options(selectinload(User.items)))
+        result_query = await session.execute(query)
+        return result_query.scalars().first()
+    @classmethod
+    async def get_user_by_id(cls, id_: int, session: AsyncSession):
+        query = (
+            select(User).filter(User.id == id_).options(selectinload(User.items))
+        )
         result_query = await session.execute(query)
         return result_query.scalars().first()
 
