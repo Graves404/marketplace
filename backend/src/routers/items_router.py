@@ -13,8 +13,7 @@ async def get_all(session: AsyncSession = Depends(get_async_session_factory)):
     return await Item.get_all_items(session)
 
 @item_router.post("/add_item", dependencies=[Depends(security.access_token_required)])
-async def add_new_item_service(req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks,
-                               session: AsyncSession = Depends(get_async_session_factory)):
+async def add_new_item_service(req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks, session: AsyncSession = Depends(get_async_session_factory)):
     return await Item.add_new_item(req, title_, description_, price_, city_, files, bg, session)
 
 @item_router.get("/get_item/{id}")

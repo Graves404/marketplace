@@ -2,7 +2,7 @@ from fastapi import Request, UploadFile, HTTPException, BackgroundTasks
 from ..queries.item_repository import ItemRepository
 from ..google_cloud.cloud_settings import upload_file, delete_files
 from ..service.jwt_service import JwtService
-from ..pydantic_schemas.schemas import ItemRelDTO, ItemIMageRelDTO, ItemGeneralDTO
+from ..pydantic_schemas.schemas import ItemIMageRelDTO, ItemGeneralDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class Item:
@@ -12,10 +12,8 @@ class Item:
         result_dto = [ItemGeneralDTO.model_validate(row, from_attributes=True) for row in result_orm]
         return result_dto
     @classmethod
-    #TODO use background
-    async def add_new_item(cls, req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks,
-                           session: AsyncSession):
-        token = req.headers.get("mne_market_accesses_token")
+    async def add_new_item(cls, req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks, session: AsyncSession):
+        token = req.headers.get("Authorization")
         user_id = JwtService.get_id_user_token(token)
         if user_id is not None:
             for file in files:

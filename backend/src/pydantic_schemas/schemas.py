@@ -1,5 +1,12 @@
 from pydantic import BaseModel, EmailStr, field_validator
-# from pydantic_extra_types.phone_numbers import PhoneNumber
+
+class UserUpdatePasswordDTO(BaseModel):
+    email: EmailStr
+    hash_pass: str
+    new_pass: str
+class UserAuthenticationDTO(BaseModel):
+    email: EmailStr
+    hash_pass: str
 class UserPostDTO(BaseModel):
     name: str
     surname: str
@@ -7,6 +14,10 @@ class UserPostDTO(BaseModel):
     city: str
     phone: str
     username: str
+
+class UserRegistrationDTO(UserPostDTO):
+    hash_pass: str
+
 class UserDTO(UserPostDTO):
     id: int
 
@@ -31,10 +42,10 @@ class ItemsPostDTO(BaseModel):
     description: str
     price: int
     city: str
-    user_id: int
 
 class ItemDTO(ItemsPostDTO):
     id: int
+    user_id: int
 
 class ItemGeneralDTO(ItemDTO):
     images: list["ImageDTO"]
