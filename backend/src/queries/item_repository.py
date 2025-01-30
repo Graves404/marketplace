@@ -1,7 +1,7 @@
 from fastapi import UploadFile
-from ..data_models.models import Items, Images, User
+from ..data_models.models import Items, Images
 from sqlalchemy import select, delete
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..settings.config import settings
 class ItemRepository:

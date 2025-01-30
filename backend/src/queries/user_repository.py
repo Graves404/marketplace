@@ -17,20 +17,19 @@ class UserRepository:
         query = (select(User).filter(User.email == email_).options(selectinload(User.items)))
         result_query = await session.execute(query)
         return result_query.scalars().first()
+
     @classmethod
     async def get_user_by_id(cls, id_: int, session: AsyncSession):
-        query = (
-            select(User).filter(User.id == id_).options(selectinload(User.items))
-        )
+        query = (select(User).filter(User.id == id_).options(selectinload(User.items)))
         result_query = await session.execute(query)
         return result_query.scalars().first()
 
     @classmethod
-    async def registration_user(cls, _username: str, _password: str, _name: str, _surname: str, _email: str, _city: str, _phone: str, session: AsyncSession):
-        new_user = User(name=_name, surname=_surname, email=_email, city=_city, phone=_phone, username=_username, hash_pass=_password)
-        session.add(new_user)
+    async def registration_user(cls, data: dict, session: AsyncSession):
+        user = User(**data)
+        session.add(user)
         await session.commit()
-        return {"msg": f"User {_username} added"}
+        return {"msg": "User added"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
