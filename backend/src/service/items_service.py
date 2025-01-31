@@ -3,6 +3,7 @@ from ..queries.item_repository import ItemRepository
 from ..google_cloud.cloud_settings import upload_file, delete_files
 from ..service.jwt_service import JwtService
 from ..pydantic_schemas.schemas import ItemIMageRelDTO, ItemGeneralDTO
+from ..pydantic_schemas.schemas import ItemsPostDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class Item:
@@ -12,15 +13,16 @@ class Item:
         result_dto = [ItemGeneralDTO.model_validate(row, from_attributes=True) for row in result_orm]
         return result_dto
     @classmethod
-    async def add_new_item(cls, req: Request, title_: str, description_: str, price_: int, city_: str, files: list[UploadFile], bg: BackgroundTasks, session: AsyncSession):
+    async def add_new_item(cls, req: Request, bg: BackgroundTasks, item: ItemsPostDTO, files: list[UploadFile], session: AsyncSession):
         token = req.headers.get("Authorization")
         user_id = JwtService.get_id_user_token(token)
+        data = item.model_dump()
         if user_id is not None:
             for file in files:
                 file_content = await file.read()
                 bg.add_task(upload_file, file.filename, file_content, file.content_type)
             #TODO: Sometimes item can be without images. If user don't upload image - we can get Expectation
-            return await ItemRepository.add_new_item(title_, description_, price_, city_, user_id, files, session)
+            return await ItemRepository.add_new_item(data, user_id, files, session)
         raise HTTPException(status_code=403, detail="Incorrect password or email")
 
     @classmethod
