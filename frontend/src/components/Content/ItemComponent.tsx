@@ -16,9 +16,6 @@ const ItemComponent: React.FC = () => {
     
     const [item, setItem] = useState<Item>();
 
-    console.log(item);
-    
-
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken()

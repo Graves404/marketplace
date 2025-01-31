@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.0",
     "@firebase/storage": "^0.13.5",
     "@tailwindcss/postcss": "^4.0.0",
     "antd": "^5.23.2",
