@@ -11,16 +11,17 @@ class ItemRepository:
         start_query = await session.execute(query)
         return start_query.scalars().all()
     @classmethod
-    async def add_new_item(cls, title_: str, description_: str, price_: int, city_: str, user_id_: int, files: list[UploadFile],
+    async def add_new_item(cls, data: dict, user_id_: int, files: list[UploadFile],
                            session: AsyncSession):
-        item = Items(title=title_, description=description_, price=price_, city=city_, user_id=user_id_)
+        item = Items(**data)
+        item.user_id = user_id_
         try:
             session.add(item)
             await session.flush()
             images = [Images(url_photo=settings.URL_CLOUD_STORAGE + file.filename, item_id=item.id) for file in files]
             session.add_all(images)
             await session.commit()
-            return {"msg", f"item {title_} added and photo {len(files)}"}
+            return {"msg", f"item added and photo {len(files)}"}
         except Exception as e:
             await session.rollback()
             raise e
