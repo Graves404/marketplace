@@ -1,12 +1,12 @@
 import React from 'react';
-import { Image } from 'antd';
+import { Image, notification } from 'antd';
 import  ImageData  from '../models/ImageData';
 
 const ImagesComponent: React.FC<ImageData> = ({ image }) => {
   return(
     <>
       <Image.PreviewGroup preview={{
-        onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+        onChange: (current, prev) => notification.error({message:`current index: ${current} prev index: ${prev}`,placement:"topRight"}),
       }}>
         <Image key={image.id} src={image.url_photo} width={200}/>
       </Image.PreviewGroup>

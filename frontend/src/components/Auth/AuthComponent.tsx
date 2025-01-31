@@ -1,7 +1,7 @@
 import HeaderComponent from "../Header/HeaderComponent";
 import FooterComponent from "../Footer/FooterComponent";
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, notification } from 'antd';
 import { Link, useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -15,6 +15,22 @@ type FieldType = {
   
   const AuthComponent: React.FC = () => {
     const navigate = useNavigate();
+
+    const errorNotification = () => {
+        notification.error({
+            message : "Ошибка входа",
+            description : "Неверный логин или пароль.",
+            placement: "topRight"
+        }) 
+    }
+
+    const successNotification = () => {
+        notification.success({
+            message: "Успешно!",
+            description : "Вы успешно вошли в аккаунт",
+            placement : "topRight"
+        })
+    }
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (user: FieldType) => {
         try {
@@ -30,15 +46,21 @@ type FieldType = {
             })
             if (response.data) {
                 Cookies.set("mne_market_accesses_token", response.data, {expires : 1, sameSite: "None", secure: true});
-                navigate('/my_profile');
+                successNotification();
+                setTimeout(()=> {
+                    navigate('/my_profile');
+                }, 500)
             }
         } catch (error) {
-            alert("Inncorect E-mail or Password")
+            errorNotification();
             console.error(error);
         }
     }
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        notification.error({
+            message : `Failed ${errorInfo}`,
+            placement : "topRight"
+        });
     }
 
     return (
