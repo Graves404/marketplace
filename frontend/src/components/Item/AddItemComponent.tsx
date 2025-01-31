@@ -25,9 +25,40 @@ const AddItemComponent: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         setLoading(true);
         try {
             const token = Cookies.get("mne_market_accesses_token");
-            notification.info({ message:"URL", description:token, placement:"topRight" });
+            
+            const formData = new FormData();
+
+            formData.append('title', value.title);
+            formData.append('description', value.description);
+            formData.append('price', value.price);
+            formData.append('city', value.city);
+
+            fileList.forEach((file) => {
+                formData.append('files', file.originFileObj);
+            });
+
+            const response = await fetch('http://127.0.0.1:8000/items/add_item', {
+                method : "POST",
+                headers : {
+                    'Authorization': `Bearer ${token}`
+                },
+                body : formData
+            });
+
+            if(response.ok) {
+                notification.success({ message: "Item added successfully!", placement:"topRight"});
+                onSuccess();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000)
+            } else {
+                notification.error({ message : "Failed to add item", placement : "topRight" });
+            }
+
         } catch(error) {
             notification.error({message:`Error ${error}`, placement:"topRight"});
+        } finally {
+            setLoading(false);
         }
     }
 
