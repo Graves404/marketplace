@@ -14,7 +14,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 user_router = APIRouter(
     prefix="/user"
 )
-
 @user_router.get("/all")
 async def get_all_users(session: AsyncSession = Depends(get_async_session_factory)) -> list[UserDTO]:
     return await User.get_list_users(session)
