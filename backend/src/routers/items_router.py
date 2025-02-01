@@ -4,11 +4,13 @@ from ..service.items_service import Item
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..engine_database.database import get_async_session_factory
 from ..pydantic_schemas.schemas import ItemsPostDTO
+from async_lru import alru_cache
 
 item_router = APIRouter(
     prefix="/items"
 )
 
+@alru_cache()
 @item_router.get("/all_items")
 async def get_all(session: AsyncSession = Depends(get_async_session_factory)):
     return await Item.get_all_items(session)
@@ -20,6 +22,7 @@ async def add_new_item_service(req: Request, bg: BackgroundTasks, title: str = F
     item = ItemsPostDTO(title=title, description=description, price=price, city=city)
     return await Item.add_new_item(req, bg, item, files, session)
 
+@alru_cache()
 @item_router.get("/get_item/{id}")
 async def get_current_item(id_: int, session: AsyncSession = Depends(get_async_session_factory)):
     return await Item.get_current_item(id_, session)
