@@ -19,19 +19,21 @@ MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")
 MAILGUN_URL = f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages"
 
-async def send_email(email, subject, message):
 
+async def send_email(email, subject, message):
     auth = aiohttp.BasicAuth("api", MAILGUN_API_KEY)
-    data = {
-            "from": "Menu 7/52 Test <mailgun@sandbox040a4dd43920480eab793830cec6072b.mailgun.org>",
-            "to": [email, f"{email}@sandbox040a4dd43920480eab793830cec6072b.mailgun.org"],
+    data = {"from": "Kupi.mne <postmaster@sandbox040a4dd43920480eab793830cec6072b.mailgun.org>",
+            "to": f"Dmitrii <{email}>",
             "subject": subject,
-            # "template": "test_action",
-            "text": message,
-    }
+            "template": "verification_email",
+            "h:X-Mailgun-Variables": json.dumps({
+                "confirm_url": f"http://127.0.0.1:8000/user/verification_address/{email}"
+            })
+            }
 
     async with httpx.AsyncClient() as client:
         response = await client.post(url=MAILGUN_URL, auth=auth, data=data)
+
         return response.status_code
 
 
@@ -44,6 +46,7 @@ async def process_message(message: aio_pika.IncomingMessage):
         except ValidationError as e:
             print(f"Error {e}")
 
+
 async def main():
     connection = await aio_pika.connect_robust(RABBITMQ_URL)
     async with connection as conn:
@@ -51,6 +54,7 @@ async def main():
             queue = await ch.declare_queue(name="email_queue", durable=True)
             await queue.consume(process_message)
             await asyncio.Future()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
