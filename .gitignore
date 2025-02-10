@@ -20,5 +20,8 @@ backend/src/security/__pycache__/__init__.cpython-311.pyc
 frontend/node_modules
 frontend/src/cloud_settings/firebasecred.json
 backend/src/security/__pycache__
-backend/temporal/.env
-backend/temporal/.env
+backend/services/.env
+backend/services/.env
+backend/src/rabbit_mq/.env
+backend/src/rabbit_mq/.env
+backend/src/rabbit_mq/.env

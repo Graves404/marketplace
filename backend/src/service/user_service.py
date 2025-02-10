@@ -6,6 +6,7 @@ from ..security.hash_pass import hash_password
 from ..pydantic_schemas.schemas import UserUpdatePostDTO, UserUpdatePasswordDTO
 from fastapi import Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from ..rabbit_mq.producer import send_to_queue
 
 class User:
     @classmethod
@@ -19,7 +20,10 @@ class User:
     async def registration(cls, user: UserRegistrationDTO, session: AsyncSession):
         user.hash_pass = hash_password(user.hash_pass)
         data = user.model_dump()
-        return await UserRepository.registration_user(data, session)
+        new_user = await UserRepository.registration_user(data, session)
+        email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
+        await send_to_queue(email_task)
+        return new_user
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):

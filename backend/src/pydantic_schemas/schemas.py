@@ -15,6 +15,11 @@ class UserPostDTO(BaseModel):
     phone: str
     username: str
 
+class EmailRabbitSchemas(BaseModel):
+    email: EmailStr
+    subject: str
+    message: str
+
 class UserRegistrationDTO(UserPostDTO):
     hash_pass: str
 
