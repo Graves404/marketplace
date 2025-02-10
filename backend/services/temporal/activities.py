@@ -8,15 +8,16 @@ load_dotenv()
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")
 
-@activity.defn
+@activity.defn(name="verification_email")
 async def send_verification_email(email: str):
     url = f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages"
     auth = aiohttp.BasicAuth("api", MAILGUN_API_KEY)
     data = {
-            "from": "Excited User <mailgun@sandbox040a4dd43920480eab793830cec6072b.mailgun.org>",
+            "from": "Menu 7/52 Test <mailgun@sandbox040a4dd43920480eab793830cec6072b.mailgun.org>",
             "to": [email, f"{email}@sandbox040a4dd43920480eab793830cec6072b.mailgun.org"],
-            "subject": "Hello from Temporal",
-            "text": "Use the temporal and mailgun - awesome"
+            "subject": "Registration",
+            "template": "test_action",
+            "h:X-Mailgun-Variables": '{"test": "test"}'
     }
 
     async with aiohttp.ClientSession() as session:
