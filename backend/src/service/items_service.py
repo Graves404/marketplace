@@ -46,6 +46,8 @@ class Item:
         return result_dto
 
 
-
+    @classmethod
+    async def validate_data_for_buy(cls):
+        return await ...
 
 
