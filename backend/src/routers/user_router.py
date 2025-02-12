@@ -39,3 +39,7 @@ async def delete_current_user(req: Request, session: AsyncSession = Depends(get_
 async def my_profile(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.get_user_info(req, session)
 
+@user_router.get("/verification_address/{email}")
+async def verification_address(email: str):
+    print(f"Email address confirmed {email}")
+    return {"msg": f"Email address confirmed {email}"}
