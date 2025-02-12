@@ -23,6 +23,11 @@ class EmailRabbitSchemas(BaseModel):
 class UserRegistrationDTO(UserPostDTO):
     hash_pass: str
 
+class PaymentItemDTO(BaseModel):
+    title: str
+    description: str
+    price: int
+
 class UserDTO(UserPostDTO):
     id: int
 
