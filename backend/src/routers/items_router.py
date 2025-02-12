@@ -3,7 +3,7 @@ from ..security.security_config import security
 from ..service.items_service import Item
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..engine_database.database import get_async_session_factory
-from ..pydantic_schemas.schemas import ItemsPostDTO
+from ..pydantic_schemas.schemas import ItemsPostDTO, PaymentItemDTO
 from async_lru import alru_cache
 from ..payments.stripe_config import StripeConfig
 
@@ -34,5 +34,5 @@ async def delete_item(id_: int, urls_: list[str], session: AsyncSession = Depend
 
 
 @item_router.post("/payment_item_session/")
-async def buy_item_by_id():
-    return await StripeConfig.payment()
+async def buy_item_by_id(payment: PaymentItemDTO):
+    return await StripeConfig.create_payment_session(payment)
