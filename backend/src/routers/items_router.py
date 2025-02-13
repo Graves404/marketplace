@@ -33,6 +33,6 @@ async def delete_item(id_: int, urls_: list[str], session: AsyncSession = Depend
     return await Item.delete_item(id_, urls_, session)
 
 
-@item_router.post("/payment_item_session/")
+@item_router.post("/payment_item_session")
 async def buy_item_by_id(payment: PaymentItemDTO):
     return await StripeConfig.create_payment_session(payment)

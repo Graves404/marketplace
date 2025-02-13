@@ -25,7 +25,6 @@ class UserRegistrationDTO(UserPostDTO):
 
 class PaymentItemDTO(BaseModel):
     title: str
-    description: str
     price: int
 
 class UserDTO(UserPostDTO):
