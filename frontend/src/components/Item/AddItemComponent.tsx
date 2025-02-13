@@ -3,6 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, Upload, notification, Button } from 'antd';
 import Cookies from 'js-cookie';
   
+
 const normFile = (e: any) => {
     if (Array.isArray(e)) {
         return e;

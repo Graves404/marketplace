@@ -7,6 +7,7 @@ import { Layout, theme, Image } from 'antd';
 import HeaderComponent from '../Header/HeaderComponent';
 import FooterComponent from '../Footer/FooterComponent';
 import UserInformationComponent from './UserInformationComponent';
+import PaymentComponent from '../Payment/PaymentComponent';
 
 const { Content } = Layout;
 
@@ -40,7 +41,7 @@ const ItemComponent: React.FC = () => {
                 <Content
                     style={{
                         padding: "0 48px",
-                        display: "flex", // Для корректного растягивания
+                        display: "flex",
                         flexDirection: "column",
                     }}
                     className="flex-grow"
@@ -48,7 +49,7 @@ const ItemComponent: React.FC = () => {
                     <div
                         style={{
                             background: colorBgContainer,
-                            minHeight: "100%", // Растягиваем контент на всю высоту
+                            minHeight: "100%",
                             padding: 24,
                             borderRadius: borderRadiusLG,
                         }}
@@ -67,6 +68,7 @@ const ItemComponent: React.FC = () => {
                             <p>{item?.description}</p>
                             <p>{item?.city}</p>
                             {item?.user && <UserInformationComponent user={item.user} />}
+                            <PaymentComponent title={item?.title} price={item?.price} />
                         </div>
                     </div>
                 </Content>
