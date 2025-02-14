@@ -18,6 +18,8 @@ class User(Base):
     phone: Mapped[str]
     username: Mapped[str]
     hash_pass: Mapped[str]
+    is_active: Mapped[bool]
+    role: Mapped[str]
 
     items: Mapped[list["Items"]] = relationship(back_populates="user", cascade="all, delete", passive_deletes=True)
 
