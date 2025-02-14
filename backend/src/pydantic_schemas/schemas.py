@@ -14,7 +14,7 @@ class UserPostDTO(BaseModel):
     city: str
     phone: str
     username: str
-    role: str = "user"
+    is_active: bool = False
 
 class EmailRabbitSchemas(BaseModel):
     email: EmailStr
@@ -30,7 +30,6 @@ class PaymentItemDTO(BaseModel):
 
 class UserDTO(UserPostDTO):
     id: int
-    is_active: bool = False
 
 
 class UserUpdatePostDTO(UserPostDTO):
