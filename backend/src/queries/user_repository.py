@@ -5,6 +5,7 @@ from ..pydantic_schemas.schemas import UserUpdatePostDTO
 from ..data_models.update_data_validation import Validation
 from typing_extensions import deprecated
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import EmailStr
 class UserRepository:
     @classmethod
     async def get_users_list(cls, session: AsyncSession):
@@ -70,3 +71,13 @@ class UserRepository:
             await session.execute(query)
             await session.commit()
         return {"msg": f"User {id_user} deleted"}
+
+    @classmethod
+    async def activate_user(cls, user: User, session: AsyncSession):
+        try:
+            await session.flush()
+            await session.commit()
+            await session.refresh(user)
+            return "Account activated"
+        except:
+            return "Account not activated"

@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import RedirectResponse
 from ..security.security_config import security
 from ..pydantic_schemas.schemas import UserDTO, UserRegistrationDTO, UserUpdatePasswordDTO
 from ..service.user_service import User
@@ -40,6 +41,6 @@ async def my_profile(req: Request, session: AsyncSession = Depends(get_async_ses
     return await User.get_user_info(req, session)
 
 @user_router.get("/verification_address/{email}")
-async def verification_address(email: str):
-    print(f"Email address confirmed {email}")
-    return {"msg": f"Email address confirmed {email}"}
+async def verification_address(email: str, session: AsyncSession = Depends(get_async_session_factory)):
+    await User.activate_service(email, session)
+    return RedirectResponse("http://localhost:5173")

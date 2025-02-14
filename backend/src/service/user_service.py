@@ -7,6 +7,7 @@ from ..pydantic_schemas.schemas import UserUpdatePostDTO, UserUpdatePasswordDTO
 from fastapi import Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..rabbit_mq.producer import send_to_queue
+from pydantic import EmailStr
 
 class User:
     @classmethod
@@ -59,3 +60,9 @@ class User:
         user_id = JwtService.get_id_user_token(token)
         user = await UserRepository.get_user_by_id(user_id, session)
         return UserRelDTO.model_validate(user, from_attributes=True)
+
+    @classmethod
+    async def activate_service(cls, email: EmailStr, session: AsyncSession):
+        user = await UserRepository.get_current_user(email_=email, session=session)
+        user.is_active = True
+        return await UserRepository.activate_user(user=user, session=session)
