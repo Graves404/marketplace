@@ -32,6 +32,11 @@ async def update_data_of_user(req: Request, update_user: UserUpdatePostDTO, sess
 async def update_password_user(req: Request, user: UserUpdatePasswordDTO, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.update_password(req=req, user=user, session=session)
 
+
+@user_router.post("/forget_password")
+async def forget_password_route(email: str, session: AsyncSession = Depends(get_async_session_factory)):
+    return await User.forget_password_service(email, session)
+
 @user_router.post("/delete_user", dependencies=[Depends(security.access_token_required)])
 async def delete_current_user(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.delete_user(req, session)

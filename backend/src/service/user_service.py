@@ -6,7 +6,7 @@ from ..security.hash_pass import hash_password
 from ..pydantic_schemas.schemas import UserUpdatePostDTO, UserUpdatePasswordDTO
 from fastapi import Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..rabbit_mq.producer import send_to_queue
+from ..rabbit_mq.producer import send_to_queue_email, send_to_queue_reset_password
 from pydantic import EmailStr
 
 class User:
@@ -23,12 +23,25 @@ class User:
         data = user.model_dump()
         new_user = await UserRepository.registration_user(data, session)
         email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
-        await send_to_queue(email_task)
+        await send_to_queue_email(email_task)
         return new_user
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
         return await UserRepository.get_id_current_user(email_, session)
+
+    @classmethod
+    async def forget_password_service(cls, email: str, session: AsyncSession):
+        try:
+            user = await UserRepository.get_current_user(email, session)
+            if user is not None:
+                email_task = {"email": user.email, "subject": "Reset Password", "message": "Please don't show nobody a new pass"}
+                await send_to_queue_reset_password(email_task)
+            else:
+                return {"msg": "User is not found"}
+        except:
+            return {"msg": "User is not found"}
+        return {"msg": "Created a new password"}
 
     @classmethod
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):
