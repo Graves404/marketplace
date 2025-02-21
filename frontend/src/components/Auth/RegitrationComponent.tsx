@@ -1,6 +1,7 @@
 import HeaderComponent from "../Header/HeaderComponent";
 import { Button, Form, Input, notification } from 'antd';
 import { useNavigate } from "react-router"
+import FooterComponent from "../Footer/FooterComponent";
 
   const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -83,6 +84,9 @@ import { useNavigate } from "react-router"
                         </Button>
                     </Form.Item>
                 </Form>
+            </div>
+            <div className="mt-auto">
+                <FooterComponent/>
             </div>
         </div>
     )

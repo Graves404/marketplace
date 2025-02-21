@@ -4,6 +4,8 @@ import ItemComponent from './components/Content/ItemComponent';
 import AuthComponent from './components/Auth/AuthComponent';
 import RegistrationComponent from './components/Auth/RegitrationComponent';
 import UserComponent from './components/User/UserComponent';
+import ForgetPassComponent from './components/Auth/ForgetPassComponent';
+import ResetPassComponent from './components/Auth/ResetPassComponent';
 
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
           <Route path='/login' element={<AuthComponent/>}/>
           <Route path='/registration' element={<RegistrationComponent/>}/>
           <Route path='/my_profile' element={<UserComponent/>}/>
+          <Route path='/forget_email' element={<ForgetPassComponent/>}/>
+          <Route path='/reset_password/:email' element={<ResetPassComponent/>}/>
         </Routes>
     </div>
   )

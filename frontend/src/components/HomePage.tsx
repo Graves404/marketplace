@@ -73,7 +73,9 @@ const HomePage: React.FC = () => {
               <ListItem urls={items} />
             </div>
           </Content>
-          <FooterComponent/>
+          <div className="mt-auto">
+            <FooterComponent/>
+          </div>
         </Layout>
       </div>
     )

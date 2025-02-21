@@ -1,7 +1,7 @@
 import HeaderComponent from "../Header/HeaderComponent";
 import FooterComponent from "../Footer/FooterComponent";
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input, notification } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import { Link, useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -91,27 +91,30 @@ type FieldType = {
                     >
                         <Input.Password />
                     </Form.Item>
-
-                    <div className="flex justify-between items-center">
-                        <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
-                            <Checkbox>Remember me</Checkbox>
-                        </Form.Item>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <Form.Item label={null} >
-                            <Button type="primary" htmlType="submit">
-                                Login
-                            </Button>
-                        </Form.Item>
-                        <Link to={`/registration`} className="flex items-center"> 
-                            <Button>
-                                Registration
-                            </Button>
-                        </Link>
-                    </div>
+                        <div className="flex justify-between items-center w-full">
+                                <div className="flex">
+                                    <Button type="primary" htmlType="submit">
+                                        Sign In
+                                    </Button>
+                                </div>
+                                <div className="flex">
+                                    <Link to={`/registration`} className="flex items-center"> 
+                                        <Button>
+                                            Sign Up
+                                        </Button>
+                                    </Link>
+                                </div>
+                        </div>
+                        <div className="flex justify-center mt-6">
+                            <Link to={`/forget_email`}>
+                                forget password
+                            </Link>
+                        </div>
                 </Form>
             </div>
-            <FooterComponent />
+            <div className="mt-auto">
+                <FooterComponent/>
+            </div>
         </div>
     );
 };
