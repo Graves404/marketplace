@@ -6,7 +6,7 @@ const FooterComponent: React.FC = () => {
     return(
         <Layout>
             <Footer style={{ textAlign: "center" }}>
-                Market ©{new Date().getFullYear()} Design created by Ant UED
+                Kupi.mne ©{new Date().getFullYear()} Design created by Kupi.mne
             </Footer>
         </Layout>
     )
