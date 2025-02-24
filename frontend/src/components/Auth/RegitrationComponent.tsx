@@ -10,9 +10,17 @@ import FooterComponent from "../Footer/FooterComponent";
     const openNotification = () => {
         notification.success({
             message : "Успешная регистрация!",
-            description : "Вы были успешно зарегистрированы.",
+            description : "Вы были успешно зарегистрированы. Ha почту отправлен email для верификации",
             placement: "topRight"
         })
+    }
+
+    const errorNotification = (description: string) => {
+        notification.error({
+            message : "Ошибка",
+            description : description,
+            placement: "topRight"
+        }) 
     }
 
     const onFinish = async (value:any) => {
@@ -24,14 +32,23 @@ import FooterComponent from "../Footer/FooterComponent";
                 }, 
                 body : JSON.stringify(value)
             });
-            if (response.ok) {
-                openNotification();
-                form.resetFields();
-                setTimeout(()=>{
-                    navigate("/");
-                }, 2000);                
+            
+            const data = await response.json();
+
+            console.log(data);
+
+            if(data.code === 389) {
+                errorNotification("Пользователь c таким Email уже зарегистриван");
             } else {
-                console.error(response.statusText);
+                if (response.ok) {
+                    openNotification();
+                    form.resetFields();
+                    setTimeout(()=>{
+                        navigate("/");
+                    }, 2000);                
+                } else {
+                    console.error(response.statusText);
+                }
             }
         } catch (error) {
             console.error(error);

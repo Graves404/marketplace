@@ -20,12 +20,19 @@ class User:
 
     @classmethod
     async def registration(cls, user: UserRegistrationDTO, session: AsyncSession):
-        user.hash_pass = hash_password(user.hash_pass)
-        data = user.model_dump()
-        new_user = await UserRepository.registration_user(data, session)
-        email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
-        await send_to_queue_email(email_task)
-        return new_user
+        try:
+            user_temp = await UserRepository.get_current_user(user.email, session)
+            if user_temp is not None:
+                return {"code": 389, "msg": f"The user with email f{user_temp.email} already existing"}
+            else:
+                user.hash_pass = hash_password(user.hash_pass)
+                data = user.model_dump()
+                new_user = await UserRepository.registration_user(data, session)
+                email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
+                await send_to_queue_email(email_task)
+                return new_user
+        except:
+            return {"msg": "Error"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
