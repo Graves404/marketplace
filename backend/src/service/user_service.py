@@ -1,7 +1,7 @@
 from ..queries.user_repository import UserRepository
 from ..queries.auth_repository import AuthRepository
 from .jwt_service import JwtService
-from ..pydantic_schemas.schemas import UserRelDTO, UserDTO, UserRegistrationDTO
+from ..pydantic_schemas.schemas import UserRelDTO, UserDTO, UserRegistrationDTO, ForgetPasswordDTO
 from ..security.hash_pass import hash_password
 from ..pydantic_schemas.schemas import UserUpdatePostDTO, UserUpdatePasswordDTO
 from fastapi import Request, HTTPException
@@ -41,7 +41,6 @@ class User:
                 return {"msg": "User is not found"}
         except:
             return {"msg": "User is not found"}
-        return {"msg": "Created a new password"}
 
     @classmethod
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):
@@ -59,6 +58,15 @@ class User:
             user_id = JwtService.get_id_user_token(token)
             return await UserRepository.update_password(user_id, hash_password(user.new_pass), session)
         raise HTTPException(status_code=403, detail="Incorrect password or email")
+
+    @classmethod
+    async def resetPasswordService(cls, password_schemas: ForgetPasswordDTO, session: AsyncSession):
+        if password_schemas.new_password == password_schemas.confirm_password:
+            user = await UserRepository.get_current_user(password_schemas.email, session)
+            user.hash_pass = hash_password(password_schemas.new_password)
+            return await UserRepository.reset_password_repository(session)
+        else:
+            return {"msg": "Difference passwords"}
 
     @classmethod
     async def delete_user(cls, req: Request, session: AsyncSession):

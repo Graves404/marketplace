@@ -52,6 +52,14 @@ class UserRepository:
         return {"msg": "Done"}
 
     @classmethod
+    async def reset_password_repository(cls, session: AsyncSession):
+        try:
+            await session.commit()
+            return {"msg": "Password updated"}
+        except:
+            return {"msg": "Error, please call to support"}
+
+    @classmethod
     async def update_password(cls, id_: int, new_password: str, session: AsyncSession):
         query = (select(User).filter(User.id == id_))
         result_query = await session.execute(query)
