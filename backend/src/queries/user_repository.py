@@ -38,17 +38,10 @@ class UserRepository:
         result_query = await session.execute(query)
         return result_query.scalar_one()
 
-    @deprecated('Now we dont know which one data will be on frontend. Next time this method will be update', category=None)
     @classmethod
-    async def refresh_data_user(cls, id_user_: int, user_update_data: UserUpdatePostDTO, session: AsyncSession):
-        query = (select(User).filter(User.id == id_user_))
-        result_query = await session.execute(query)
-        user = result_query.scalars().first()
-        if not user:
-            return {"msg": "user not found"}
-        val_user = Validation.validation_data(user, user_update_data)
+    async def refresh_data_user(cls, user_update_data: UserUpdatePostDTO, session: AsyncSession):
         await session.commit()
-        await session.refresh(val_user)
+        await session.refresh(user_update_data)
         return {"msg": "Done"}
 
     @classmethod

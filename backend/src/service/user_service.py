@@ -7,6 +7,7 @@ from ..pydantic_schemas.schemas import UserUpdatePostDTO, UserUpdatePasswordDTO
 from fastapi import Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..rabbit_mq.producer import send_to_queue_email, send_to_queue_reset_password
+from ..data_models.update_data_validation import Validation
 from pydantic import EmailStr
 
 class User:
@@ -46,7 +47,9 @@ class User:
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):
         token = req.headers.get("Authorization")
         user_id = JwtService.get_id_user_token(token)
-        res = await UserRepository.refresh_data_user(user_id, update_user, session)
+        user = UserRepository.get_user_by_id(user_id, session)
+        val_user = Validation.validation_data(user, update_user)
+        res = await UserRepository.refresh_data_user(val_user, session)
         return {f"{user_id}": res}
 
 
