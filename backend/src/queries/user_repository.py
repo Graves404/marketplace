@@ -27,10 +27,13 @@ class UserRepository:
 
     @classmethod
     async def registration_user(cls, data: dict, session: AsyncSession):
-        user = User(**data)
-        session.add(user)
-        await session.commit()
-        return {"msg": "User added"}
+        try:
+            user = User(**data)
+            session.add(user)
+            await session.commit()
+            return {"code": 200, "msg": "The user added"}
+        except:
+            return {"code": 500, "msg": "Problem with server"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
