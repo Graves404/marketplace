@@ -4,6 +4,13 @@ class UserUpdatePasswordDTO(BaseModel):
     email: EmailStr
     hash_pass: str
     new_pass: str
+
+
+class ForgetPasswordDTO(BaseModel):
+    email: EmailStr
+    new_password: str
+    confirm_password: str
+
 class UserAuthenticationDTO(BaseModel):
     email: EmailStr
     hash_pass: str

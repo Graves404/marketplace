@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import RedirectResponse
 from ..security.security_config import security
-from ..pydantic_schemas.schemas import UserDTO, UserRegistrationDTO, UserUpdatePasswordDTO
+from ..pydantic_schemas.schemas import UserDTO, UserRegistrationDTO, UserUpdatePasswordDTO, ForgetPasswordDTO
 from ..service.user_service import User
 from ..pydantic_schemas.schemas import UserUpdatePostDTO
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,9 +33,13 @@ async def update_password_user(req: Request, user: UserUpdatePasswordDTO, sessio
     return await User.update_password(req=req, user=user, session=session)
 
 
-@user_router.post("/forget_password")
+@user_router.post("/forget_password/{email}")
 async def forget_password_route(email: str, session: AsyncSession = Depends(get_async_session_factory)):
     return await User.forget_password_service(email, session)
+
+@user_router.post("/reset_password")
+async def reset_password_route(data: ForgetPasswordDTO, session: AsyncSession = Depends(get_async_session_factory)):
+    return await User.resetPasswordService(data, session)
 
 @user_router.post("/delete_user", dependencies=[Depends(security.access_token_required)])
 async def delete_current_user(req: Request, session: AsyncSession = Depends(get_async_session_factory)):
