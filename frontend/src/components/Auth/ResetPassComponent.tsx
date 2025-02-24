@@ -12,10 +12,10 @@ type FieldType = {
     confirm_password?: string
   };
 
-  const errorNotification = () => {
+  const errorNotification = (description: string) => {
     notification.error({
         message : "Ошибка",
-        description : "He получилось поменять пороль, обратиться в поддежку",
+        description : description,
         placement: "topRight"
     }) 
 }
@@ -32,25 +32,33 @@ const ResetPassComponent: React.FC = () => {
     const { email } = useParams<{ email : string }>();
 
     const onFinish = async (user:FieldType) => {
-        try {
-            const response = await axios.post<FieldType>("http://127.0.0.1:8000/user/reset_password",
-                {
-                    "email" : email,
-                    "password" : user.password,
-                    "confirm_password" : user.confirm_password
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
-            if (response.data) {
-                successNotification();
-            } else {
-                errorNotification();
+        if(user.password !== user.confirm_password) {
+            errorNotification("Разные пароли");
+        } else {
+            try {
+                const response = await axios.post<FieldType>("http://127.0.0.1:8000/user/reset_password",
+                    {
+                        "email" : email,
+                        "new_password" : user.password,
+                        "confirm_password" : user.confirm_password
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                console.log(response);
+                
+                if (response.data) {
+                    successNotification();
+                } else {
+                    console.log(response.data);
+                    errorNotification("He получилось поменять пороль, обратиться в поддежку");
+                }
+            } catch (error) {
+                console.error(error);
+                errorNotification("He получилось поменять пороль, обратиться в поддежку")
             }
-        } catch (error) {
-            console.error(error);
         }
       };
 
