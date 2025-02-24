@@ -27,15 +27,18 @@ class User:
             else:
                 user.hash_pass = hash_password(user.hash_pass)
                 data = user.model_dump()
-                new_user = await UserRepository.registration_user(data, session)
+                code_status = await UserRepository.registration_user(data, session)
                 email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
                 await send_to_queue_email(email_task)
-                return new_user
+                return code_status
         except:
-            return {"msg": "Error"}
+            return {"code": 500, "msg": "Problem with server"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
+        user_id = await UserRepository.get_id_current_user(email_, session)
+        if user_id is None:
+            return {"code": 303, "msg": "The user not found"}
         return await UserRepository.get_id_current_user(email_, session)
 
     @classmethod
@@ -46,9 +49,9 @@ class User:
                 email_task = {"email": user.email, "subject": "Reset Password", "message": "Please don't show nobody a new pass"}
                 await send_to_queue_reset_password(email_task)
             else:
-                return {"msg": "User is not found"}
+                return {"code": 303, "msg": "User is not found"}
         except:
-            return {"msg": "User is not found"}
+            return {"code": 303, "msg": "User is not found"}
 
     @classmethod
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):
@@ -76,7 +79,7 @@ class User:
             user.hash_pass = hash_password(password_schemas.new_password)
             return await UserRepository.reset_password_repository(session)
         else:
-            return {"msg": "Difference passwords"}
+            return {"code": 578, "msg": "Difference passwords"}
 
     @classmethod
     async def delete_user(cls, req: Request, session: AsyncSession):

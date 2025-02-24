@@ -44,3 +44,11 @@ an account as either a regular user or a store.
 1. PostgreSQL
 2. YDB
 
+
+### Code
+1. 200 - The user added
+2. 389 - The user with email already existing
+3. 303 - The user not found
+4. 403 - Incorrect password or email
+5. 578 - Difference passwords
+6. 
