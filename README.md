@@ -46,9 +46,13 @@ an account as either a regular user or a store.
 
 
 ### Code
-1. 200 - The user added
-2. 389 - The user with email already existing
-3. 303 - The user not found
-4. 403 - Incorrect password or email
-5. 578 - Difference passwords
-6. 
+1. 200 - Completed
+2. 201 - Created
+3. 204 - Deleted
+4. 303 - The user not found
+5. 400 - Bad Request (Validation error)
+6. 401 - The user not authorized
+7. 403 - Incorrect password or email
+8. 404 - Not found
+9. 409 - Conflict (The user or item already existing)
+10. 578 - Difference passwords
