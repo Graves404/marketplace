@@ -23,7 +23,7 @@ class User:
         try:
             user_temp = await UserRepository.get_current_user(user.email, session)
             if user_temp is not None:
-                return {"code": 389, "msg": f"The user with email f{user_temp.email} already existing"}
+                return {"code": 409, "msg": f"The user with email f{user_temp.email} already existing"}
             else:
                 user.hash_pass = hash_password(user.hash_pass)
                 data = user.model_dump()
@@ -31,14 +31,14 @@ class User:
                 email_task = {"email": user.email, "subject": "Welcome!", "message": "Thanks for registered"}
                 await send_to_queue_email(email_task)
                 return code_status
-        except:
-            return {"code": 500, "msg": "Problem with server"}
+        except Exception as e:
+            return {"code": 500, "msg": f"Problem with server {e}"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
         user_id = await UserRepository.get_id_current_user(email_, session)
         if user_id is None:
-            return {"code": 303, "msg": "The user not found"}
+            return {"code": 404, "msg": "The user not found"}
         return await UserRepository.get_id_current_user(email_, session)
 
     @classmethod
@@ -49,9 +49,9 @@ class User:
                 email_task = {"email": user.email, "subject": "Reset Password", "message": "Please don't show nobody a new pass"}
                 await send_to_queue_reset_password(email_task)
             else:
-                return {"code": 303, "msg": "User is not found"}
+                return {"code": 404, "msg": "User is not found"}
         except:
-            return {"code": 303, "msg": "User is not found"}
+            return {"code": 404, "msg": "User is not found"}
 
     @classmethod
     async def update_data_user(cls, req: Request, update_user: UserUpdatePostDTO, session: AsyncSession):

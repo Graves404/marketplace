@@ -31,9 +31,9 @@ class UserRepository:
             user = User(**data)
             session.add(user)
             await session.commit()
-            return {"code": 200, "msg": "The user added"}
-        except:
-            return {"code": 500, "msg": "Problem with server"}
+            return {"code": 201, "msg": "The user added"}
+        except Exception as e:
+            return {"code": 500, "msg": f"Problem with server {e}"}
 
     @classmethod
     async def get_id_current_user(cls, email_: str, session: AsyncSession):
@@ -45,15 +45,15 @@ class UserRepository:
     async def refresh_data_user(cls, user_update_data: UserUpdatePostDTO, session: AsyncSession):
         await session.commit()
         await session.refresh(user_update_data)
-        return {"msg": "Done"}
+        return {"code": 200, "msg": "Completed"}
 
     @classmethod
     async def reset_password_repository(cls, session: AsyncSession):
         try:
             await session.commit()
-            return {"msg": "Password updated"}
+            return {"code": 200, "msg": "The password was reseted"}
         except:
-            return {"msg": "Error, please call to support"}
+            return {"code": 500, "msg": "Error, please call to support"}
 
     @classmethod
     async def update_password(cls, id_: int, new_password: str, session: AsyncSession):
@@ -61,11 +61,11 @@ class UserRepository:
         result_query = await session.execute(query)
         user = result_query.scalars().first()
         if not user:
-            return {"msg": "User not found"}
+            return {"code": 404, "msg": "User not found"}
         user.hash_pass = new_password
         await session.commit()
         await session.refresh(user)
-        return {"msg": "Password was updated"}
+        return {"code": 200, "msg": "Password was updated"}
 
 
     @classmethod
@@ -74,7 +74,7 @@ class UserRepository:
             query = (delete(User).filter(User.id == id_user))
             await session.execute(query)
             await session.commit()
-        return {"msg": f"User {id_user} deleted"}
+        return {"code": 200, "msg": f"The user {id_user} was deleted"}
 
     @classmethod
     async def activate_user(cls, user: User, session: AsyncSession):
@@ -82,6 +82,6 @@ class UserRepository:
             await session.flush()
             await session.commit()
             await session.refresh(user)
-            return "Account activated"
+            return {"code": 200, "msg": "The account was activated"}
         except:
-            return "Account not activated"
+            return {"code": 500, "msg": "The account was not activated"}
