@@ -4,7 +4,7 @@ from ..security.security_config import config, security
 from .user_service import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..pydantic_schemas.schemas import UserAuthenticationDTO
-
+import datetime
 
 class Auth:
     @classmethod
@@ -13,7 +13,7 @@ class Auth:
         data = user.model_dump()
         if await AuthRepository.authentication(data, session=session):
             uid_ = await User.get_id_current_user(email_=user.email, session=session)
-            token = security.create_access_token(uid=str(uid_))
+            token = security.create_access_token(uid=str(uid_), expiry=datetime.timedelta(minutes=60), secure=True, same_site="lax", httponly=True)
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, token)
             return token
         raise HTTPException(status_code=401, detail="Incorrect password or email")
