@@ -8,7 +8,6 @@ import HeaderComponent from '../Header/HeaderComponent';
 import FooterComponent from '../Footer/FooterComponent';
 import UserInformationComponent from './UserInformationComponent';
 import PaymentComponent from '../Payment/PaymentComponent';
-
 const { Content } = Layout;
 
 const ItemComponent: React.FC = () => {
@@ -34,7 +33,7 @@ const ItemComponent: React.FC = () => {
         fetchItem()
     }, [id, fetchItem]);  
 
-        return (
+    return (
         <div className="flex flex-col min-h-screen">
             <Layout className="flex flex-col flex-grow">
                 <HeaderComponent />
@@ -55,27 +54,46 @@ const ItemComponent: React.FC = () => {
                         }}
                         className="flex justify-center items-center flex-grow"
                     >
-                        <div className="flex flex-col text-center">
-                            <p className="font-mono">{item?.title}</p>
-                            <Image.PreviewGroup>
-                                <div className="flex space-x-4">
-                                    {item?.images.map((img) => {
-                                        return <Image key={img.id} src={img.url_photo} width={200} />;
-                                    })}
+                        <div className="flex flex-col w-full max-w-4xl">
+                            <p className="text-4xl font-bold mb-20" style={{ marginBottom: '2rem' }}>{item?.title}</p>
+                            <div className="flex flex-row space-x-8">
+                            <div className="flex space-x-4 flex-grow">
+                                <Image.PreviewGroup>
+                                    {item?.images.map((img) => (
+                                        <Image
+                                            key={img.id}
+                                            src={img.url_photo}
+                                            className="w-48 h-48 object-cover rounded-lg"
+                                            width={200}
+                                        />
+                                    ))}
+                                </Image.PreviewGroup>
+                            </div>
+                            <div className="w-64 flex-shrink-0 flex flex-col space-y-4">
+                                <p className="text-3xl font-bold">{item?.price} $</p>
+                                <div className="flex space-x-8">
+                                    {item?.user && <UserInformationComponent user={item.user} />}
                                 </div>
-                            </Image.PreviewGroup>
-                            <p>{item?.price} EUR</p>
-                            <p>{item?.description}</p>
-                            <p>{item?.city}</p>
-                            {item?.user && <UserInformationComponent user={item.user} />}
-                            {item && <PaymentComponent title={item.title} price={item.price} />}
+                                <div className="flex justify-center w-full">
+                                    {item && <PaymentComponent title={item.title} price={item.price} />}
+                                </div>
+                            </div>
+                        </div>
+                            <div className="mb-6">
+                                <p className="text-2xl font-bold mb-2">Location</p>
+                                <p className='text-xl'>{item?.city}</p>
+                            </div>
+                            <div className="mb-6">
+                                <p className="text-2xl font-bold mb-2">Description</p>
+                                <p className='text-xl'>{item?.description}</p>
+                            </div>
                         </div>
                     </div>
                 </Content>
                 <FooterComponent />
             </Layout>
         </div>
-        )
+    );
 }
 
 export default ItemComponent;
