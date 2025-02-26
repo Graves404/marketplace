@@ -1,16 +1,16 @@
 import React from 'react';
-import { Image, notification } from 'antd';
+import { Image } from 'antd';
 import  ImageData  from '../models/ImageData';
 
-const ImagesComponent: React.FC<ImageData> = ({ image }) => {
+interface Props {
+  image: ImageData;
+}
+
+const ImagesComponent: React.FC<Props> = ({ image }) => {
   return(
-    <>
-      <Image.PreviewGroup preview={{
-        onChange: (current, prev) => notification.error({message:`current index: ${current} prev index: ${prev}`,placement:"topRight"}),
-      }}>
-        <Image key={image.id} src={image.url_photo} width={200}/>
-      </Image.PreviewGroup>
-    </>
+    <div className="w-full h-full object-cover">
+        <Image key={image.id} src={image.url_photo} width={200} className='object-center'/>
+    </div>
   )
 };
 
