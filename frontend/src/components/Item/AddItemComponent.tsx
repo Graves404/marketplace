@@ -1,28 +1,37 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, Upload, notification, Button } from 'antd';
+import type { UploadFile } from 'antd/es/upload/interface';
 import Cookies from 'js-cookie';
   
 
-const normFile = (e: any) => {
+const normFile = (e: {fileList: UploadFile[]} | UploadFile[]) => {
     if (Array.isArray(e)) {
         return e;
     }
     return e?.fileList;
 };
+
+type FormValues = {
+    title: string;
+    description: string;
+    price: string;
+    city: string;
+    images?: UploadFile[];
+}
   
 
 const AddItemComponent: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
     const [loading, setLoading] = useState(false);
 
-    const [fileList, setFileList] = useState<any[]>([]);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-    const handleFileChange = ({ fileList }: any) => {
+    const handleFileChange = ({ fileList }: {fileList: UploadFile[]}) => {
         setFileList(fileList);
     };
 
-    const onFinish = async (value : any) => {
+    const onFinish = async (value : FormValues) => {
         setLoading(true);
         try {
             const token = Cookies.get("mne_market_accesses_token");
@@ -35,7 +44,7 @@ const AddItemComponent: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
             formData.append('city', value.city);
 
             fileList.forEach((file) => {
-                formData.append('files', file.originFileObj);
+                formData.append('files', file.originFileObj as Blob);
             });
 
             const response = await fetch('http://127.0.0.1:8000/items/add_item', {
