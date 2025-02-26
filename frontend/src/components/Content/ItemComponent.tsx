@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import Item from '../../models/Item';
 
@@ -21,18 +21,18 @@ const ItemComponent: React.FC = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken()
     
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
-          const response = await axios.get<Item>(`http://127.0.0.1:8000/items/get_item/${id}?id_=${id}`); 
-          setItem(response.data);
+            const response = await axios.get<Item>(`http://127.0.0.1:8000/items/get_item/${id}?id_=${id}`); 
+            setItem(response.data);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
+    }, [id]);
     
-      useEffect(()=> {
-      fetchItem()
-    }, [id]);  
+    useEffect(() => {
+        fetchItem()
+    }, [id, fetchItem]);  
 
         return (
         <div className="flex flex-col min-h-screen">
@@ -68,7 +68,7 @@ const ItemComponent: React.FC = () => {
                             <p>{item?.description}</p>
                             <p>{item?.city}</p>
                             {item?.user && <UserInformationComponent user={item.user} />}
-                            <PaymentComponent title={item?.title} price={item?.price} />
+                            {item && <PaymentComponent title={item.title} price={item.price} />}
                         </div>
                     </div>
                 </Content>

@@ -73,7 +73,7 @@ const ResetPassComponent: React.FC = () => {
                 <HeaderComponent/>
             </div>
             <div className="flex-1 flex justify-center items-center">
-                <Card title="Input a new password" variant="borderless" style={{ width: 500 }}>
+                <Card title="Input a new password" style={{ width: 500 }}>
                     <Form
                         name="basic"
                         labelCol={{ span: 8 }}

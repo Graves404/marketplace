@@ -2,6 +2,7 @@ import HeaderComponent from "../Header/HeaderComponent";
 import { Button, Form, Input, notification } from 'antd';
 import { useNavigate } from "react-router"
 import FooterComponent from "../Footer/FooterComponent";
+import RegistrationData from "../../models/RegistrationData";
 
   const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -23,7 +24,7 @@ import FooterComponent from "../Footer/FooterComponent";
         }) 
     }
 
-    const onFinish = async (value:any) => {
+    const onFinish = async (value:RegistrationData) => {
         try {
             const response = await fetch("http://127.0.0.1:8000/user/registration_service", {
                 method : "POST",
@@ -110,13 +111,3 @@ import FooterComponent from "../Footer/FooterComponent";
 }
 
 export default RegistrationComponent;
-
-// {
-//     "name": "string",
-//     "surname": "string",
-//     "email": "user@example.com",
-//     "city": "string",
-//     "phone": "string",
-//     "username": "string",
-//     "hash_pass": "string"
-//   }

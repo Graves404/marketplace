@@ -45,7 +45,7 @@ type FieldType = {
                 }
             })
             if (response.data) {
-                Cookies.set("mne_market_accesses_token", response.data, {expires : 1, sameSite: "None", secure: true});
+                Cookies.set("mne_market_accesses_token", String(response.data), {expires : 1, sameSite: "None", secure: true});
                 successNotification();
                 setTimeout(()=> {
                     navigate('/my_profile');
