@@ -49,9 +49,9 @@ const PaymentComponent: React.FC<PaymentData> = ({ title, price }) => {
   }
   
   return(
-    <div>
-      <Button onClick={handleCheckout}>
-        {loading ? "Loading..." : `Pay`}
+    <div className="flex justify-center">
+      <Button onClick={handleCheckout} color="blue" variant="solid" size="large">
+        <p className="text-2xl">{loading ? "Loading..." : `Pay`}</p>
       </Button>
     </div>
   )
