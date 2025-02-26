@@ -8,7 +8,7 @@ type FieldType = {
     email?: string;
   };
 
-  const errorNotification = (value:any) => {
+  const errorNotification = (value:string) => {
     notification.error({
         message : "Ошибка",
         description : `Почта ${value} не найдена`,
@@ -16,7 +16,7 @@ type FieldType = {
     }) 
 }
 
-const successNotification = (value:any) => {
+const successNotification = (value:string) => {
     notification.success({
         message: "Успешно!",
         description : `Ha электронную почту ${value} отправлено письмо для восстановление пароля`,
@@ -35,10 +35,10 @@ const ForgetPassComponent: React.FC = () => {
                 method : "POST",
             })
             if(response.ok){
-                successNotification(value.email);
+                successNotification(value.email || "");
                 form.resetFields();
             } else {
-                errorNotification(value.email);
+                errorNotification(value.email || "");
             }
         } catch (error) {
             console.error(error);
@@ -55,7 +55,7 @@ const ForgetPassComponent: React.FC = () => {
                 <HeaderComponent />
             </div>
             <div className="flex-1 flex justify-center items-center">
-                <Card title="Find your account" variant="borderless" style={{ width: 500 }}>
+                <Card title="Find your account" style={{ width: 500 }}>
                     <p>Please enter your email to search for your account.</p>
                     <Form
                         form={form}
