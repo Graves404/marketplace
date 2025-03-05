@@ -1,32 +1,29 @@
 package main
 
 import (
-	"fmt"
+	"microservices/database_pg"
+	"microservices/models"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-type kelvin float64
-type celsius float64
-type activator bool
-
-func (k kelvin) celsius() celsius {
-	return celsius(k - 273.15) // convert float64 to celsius
-}
-
-func (c celsius) kelvin() kelvin {
-	return kelvin(c + 273.15) // convert float64 to kelvin
-}
-
-func (a activator) activator() activator {
-	a = true
-	return a
-}
-
-func make_yandex_man() bool {
-	return true
-}
-
 func main() {
-	var arr = []int{}
-	fmt.Println(arr)
+	router := gin.Default()
 
+	router.GET("/get_user/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		db := database_pg.Conn()
+
+		var user models.User
+		result := db.First(&user, id)
+		if result.Error != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, user)
+	})
+
+	router.Run(":9090")
 }
