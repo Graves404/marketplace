@@ -8,9 +8,13 @@ type User struct {
 	Surname   string    `json:"surname"`
 	Email     string    `json:"email"`
 	City      string    `json:"city"`
-	CreatedAt time.Time `json:"created_at"`
+	CreatedAt time.Time `json:"-"`
 	Phone     string    `json:"phone"`
 	Username  string    `json:"username"`
-	HashPass  string    `json:"hash_pass"`
+	HashPass  string    `json:"-"`
 	IsActive  bool      `json:"is_active"`
+}
+
+func (u *User) FixErrorJSON() time.Time {
+	return time.Now()
 }
