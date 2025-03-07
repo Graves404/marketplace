@@ -1,6 +1,7 @@
 /.venv
 backend/src/firebase_key.json
 *.pyc
+*.sum
 /__pycache__
 backend/src/routers/__pycache__
 backend/src/queries/__pycache__
