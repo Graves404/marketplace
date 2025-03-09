@@ -5,6 +5,7 @@ import (
 	"microservices/models"
 	"microservices/repository"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -33,7 +34,7 @@ func createToken(id_user int) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"sub": id_user,
+			"sub": strconv.Itoa(id_user),
 			"exp": time.Now().Add(time.Hour * 24).Unix(),
 		})
 	tokenResult, err := token.SignedString([]byte(secret_key))
