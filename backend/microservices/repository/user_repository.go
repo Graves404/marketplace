@@ -27,3 +27,13 @@ func GetUserByID(id int) (*models.User, error) {
 	}
 	return user, nil
 }
+
+func GetUserByEmail(email string) (string, int, error) {
+	db := engine.Conn()
+	var user models.User
+	result := db.Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		return "", 0, result.Error
+	}
+	return user.HashPass, user.ID, nil
+}

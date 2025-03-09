@@ -28,3 +28,4 @@ backend/src/rabbit_mq/.env
 backend/src/rabbit_mq/.env
 backend/.env
 backend/src/rabbit_mq/.env
+backend/microservices/.env

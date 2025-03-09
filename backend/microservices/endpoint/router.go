@@ -36,6 +36,17 @@ func RegisterationRouter(c *gin.Context) {
 	}
 }
 
-func LoginRouter(C *gin.Context) {
+func LoginRouter(c *gin.Context) {
+
+	var new_auth models.Auth
+
+	if err := c.ShouldBindJSON(&new_auth); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	hash_pass := services.LoginService(new_auth)
+
+	c.JSON(http.StatusOK, gin.H{"token": hash_pass})
 
 }
