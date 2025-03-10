@@ -48,5 +48,4 @@ func LoginRouter(c *gin.Context) {
 	hash_pass := services.LoginService(new_auth)
 
 	c.JSON(http.StatusOK, gin.H{"token": hash_pass})
-
 }

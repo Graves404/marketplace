@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import RedirectResponse
@@ -18,11 +16,6 @@ user_router = APIRouter(
 @user_router.get("/all")
 async def get_all_users(session: AsyncSession = Depends(get_async_session_factory)) -> list[UserDTO]:
     return await User.get_list_users(session)
-
-@user_router.post("/registration_service")
-async def registration(user: UserRegistrationDTO, session: AsyncSession = Depends(get_async_session_factory)):
-    return await User.registration(user, session)
-
 
 @user_router.put("/update_data", dependencies=[Depends(security.access_token_required)])
 async def update_data_of_user(req: Request, update_user: UserUpdatePostDTO, session: AsyncSession = Depends(get_async_session_factory)):
